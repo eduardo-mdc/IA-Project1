@@ -1,6 +1,8 @@
 import pygame
 from pygame.locals import *
-import menu,game_handler
+from handler import *
+from states import *
+
  
 class App:
     def __init__(self):
@@ -13,7 +15,7 @@ class App:
         pygame.init()
         self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
-        self._handler = GameHandler()
+        self._handler = GameHandler(self._display_surf, self.size)
 
  
     #proceeds events like pressed keys, mouse motion etc
@@ -31,7 +33,11 @@ class App:
 
     #prints out screen graphics
     def on_render(self):
-        pass
+        match self._handler.state:
+            case 'menu':
+                self._handler.menu.display()
+            case _:
+                self.on_cleanup()
 
     #removes remaining objects.
     def on_cleanup(self):
