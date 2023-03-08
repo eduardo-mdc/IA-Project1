@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from states.menus.mainmenu import MainMenu
 from states.runner import *
+import json
 
 
 class GameHandler:
@@ -9,6 +10,11 @@ class GameHandler:
         self.state = 'menu'
         self.menu = MainMenu(display_surf, size)
         self.runner = Runner(display_surf, size)
+        self._getConfiguration("config.json")
 
+    def _getConfiguration(self,config_path):
+        with open(config_path) as file:
+            self._config = json.load(file)
 
+        
         
