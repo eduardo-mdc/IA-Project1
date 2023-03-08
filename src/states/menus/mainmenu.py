@@ -3,6 +3,7 @@ import pygame_menu
 from pygame.locals import *
 from states.gamestate import *
 from states.menus.gamemenu import Menu
+from main import *
 
 class MainMenu(Menu):
     def __init__(self,display_surf,size):
@@ -10,19 +11,16 @@ class MainMenu(Menu):
 
     def _init_menu(self):
         self._menu = pygame_menu.Menu('AI Block Game', self._size[0], self._size[1],theme=pygame_menu.themes.THEME_GREEN)
-        self._menu.add.text_input('Name :', default='John Doe')
-        self._menu.add.selector('Difficulty :', [('Hard', 1), ('Easy', 2)], onchange=self._set_difficulty)
         self._menu.add.button('Play', self._start_the_game)
         self._menu.add.button('Quit', pygame_menu.events.EXIT)
 
-    def _set_difficulty(self,value,difficulty):
-        print(value)
 
     def _start_the_game(self):
-        print("Started")
+        pygame.event.post(pygame.event.Event(events['START_GAME']))
+        self._menu.disable()
 
     def display(self):
-        self._menu.mainloop(self._display_surf)
+        self._menu.mainloop(self._display_surf,disable_loop=True)
                 
             
 

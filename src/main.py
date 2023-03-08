@@ -3,7 +3,11 @@ from pygame.locals import *
 from handler import *
 from states import *
 
- 
+
+events = {
+    "START_GAME" : pygame.USEREVENT + 1
+}
+
 class App:
     def __init__(self):
         self._running = True
@@ -16,32 +20,36 @@ class App:
         self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
         self._handler = GameHandler(self._display_surf, self.size)
-
  
     #proceeds events like pressed keys, mouse motion etc
     def on_event(self, event):
+        print(str(event))
         if event.type == pygame.QUIT:
             self._running = False
+        if event.type == events['START_GAME']:
+            self._handler.state = 'running'
 
     #compute changes in the game world
     def on_loop(self):
         match self._handler.state:
             case 'menu':
                 pass
-            case _:
-                self.on_cleanup()
+            case 'running':
+                pass
+
 
     #prints out screen graphics
     def on_render(self):
         match self._handler.state:
             case 'menu':
                 self._handler.menu.display()
-            case _:
-                self.on_cleanup()
+            case 'running':
+                self._handler.runner.display()
 
     #removes remaining objects.
     def on_cleanup(self):
         pygame.quit()
+        exit()
  
     #initializes game, and holds main loop
     def on_execute(self):
