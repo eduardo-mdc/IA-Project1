@@ -1,5 +1,8 @@
 {
     "game" : {
-        "matrix_size" : 100
+        "matrix_size" : 50
+    },
+    "visual" : {
+        "block_margin" : 1
     }
 }

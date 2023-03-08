@@ -8,6 +8,11 @@ events = {
     "START_GAME" : pygame.USEREVENT + 1
 }
 
+colors = {
+    "BLACK" : (0,0,0),
+    "LAVENDER" : (230,230,250)
+}
+
 class App:
     def __init__(self):
         self._running = True
