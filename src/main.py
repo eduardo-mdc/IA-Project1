@@ -17,7 +17,7 @@ class App:
     def __init__(self):
         self._running = True
         self._display_surf = None
-        self._screenSize = [800,600]
+        self._screenSize = [800,800]
         self.size = self.weight, self.height = self._screenSize[0], self._screenSize[1]
  
     def on_init(self):
