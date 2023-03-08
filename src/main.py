@@ -23,7 +23,6 @@ class App:
  
     #proceeds events like pressed keys, mouse motion etc
     def on_event(self, event):
-        print(str(event))
         if event.type == pygame.QUIT:
             self._running = False
         if event.type == events['START_GAME']:
@@ -45,6 +44,9 @@ class App:
                 self._handler.menu.display()
             case 'running':
                 self._handler.runner.display()
+        
+        pygame.display.flip()
+
 
     #removes remaining objects.
     def on_cleanup(self):
