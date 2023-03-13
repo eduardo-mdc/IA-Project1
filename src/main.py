@@ -10,7 +10,11 @@ events = {
 
 colors = {
     "BLACK" : (0,0,0),
-    "LAVENDER" : (230,230,250)
+    "LAVENDER" : (230,230,250),
+    'RED': (255, 0, 0),
+    'GREEN': (0, 255, 0),
+    'BLUE': (0, 0, 255),
+    'WHITE': (255, 255, 255)  # Add this line
 }
 
 class App:

@@ -10,8 +10,9 @@ class Runner(GameState):
         super().__init__(display_surf,size)
         self._config = config
         self._create_visual_matrix()
-        self.generate_maze(self._config['game']['matrix_size'],self._config['game']['matrix_size'])
-       
+        self.maze = self.generate_maze(self._config['game']['matrix_size'],self._config['game']['matrix_size'])
+        self.block_position = [0, 0] # The position of the block in the maze
+    
     def _create_visual_matrix(self):
         self._width = self._size[0]
         self._height = self._size[1]
@@ -20,7 +21,6 @@ class Runner(GameState):
         self._square_width = self._width / self._cols
         self._square_height = self._height / self._rows
         
-
     def display(self):
         self._display_surf.fill((colors['BLACK']))
 
@@ -32,33 +32,48 @@ class Runner(GameState):
                 y = row * self._square_height + self._config['visual']['block_margin']
                 
                 # Get the color of the square
-                color = colors['LAVENDER']
+                if self.maze[row][col] == 0:
+                    color = colors['BLACK']
+                else:
+                    color = colors['WHITE']
                 
                 # Draw the square
                 pygame.draw.rect(self._display_surf, color, (x, y, self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
 
-   
+                # Draw the block
+                if [row, col] == self.block_position:
+                    pygame.draw.rect(self._display_surf, colors['RED'], (x, y, self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
+                padding =0 
+                # Draw the start cell as X and finish cell as O
+                if (row, col) == (0, 0):
+                    font = pygame.font.Font(None, int(self._square_height*0.8))
+                    text = font.render('X', True, colors['GREEN'])
+                    text_rect = text.get_rect(center=(int(x+self._square_width/2), int(y+self._square_height/2)))
+                    self._display_surf.blit(text, text_rect)
+                elif (row, col) == (self._rows-1, self._cols-1):
+                    font = pygame.font.Font(None, int(self._square_height*0.8))
+                    text = font.render('O', True, colors['GREEN'])
+                    text_rect = text.get_rect(center=(int(x+self._square_width/2), int(y+self._square_height/2)))
+                    self._display_surf.blit(text, text_rect)
     def generate_maze(self, width, height):
         # Create a 2D grid with all walls intact
         maze = [[0] * width for _ in range(height)]
 
         # Choose a random finishing line
-        finish_row = random.randint(height//2, height-2)
-        finish_col = width - 1
+        finish_row = random.randint(height-2, height-1)
+        finish_col = random.randint(0, width-1)
 
         # Call the recursive backtracking algorithm to carve a path through the maze
-        self.carve_path(0, 0, finish_row, finish_col, maze)
+        self.carve_path(finish_row, finish_col, maze)
 
         # Remove the walls at the entrance and exit
         maze[0][0:2] = [1, 1]
         maze[finish_row][finish_col-1:finish_col+1] = [1, 1]
 
-        for row in range(height):
-            print(*maze[row])
-
         return maze
-
-    def carve_path(self, row, col, finish_row, finish_col, maze):
+        
+    
+    def carve_path(self, row, col, maze):
         # Mark the current cell as visited
         maze[row][col] = 1
 
@@ -70,37 +85,33 @@ class Runner(GameState):
             neighbors.append((row+1, col))
         if col > 0 and maze[row][col-1] == 0:
             neighbors.append((row, col-1))
-        if col < len(maze[0])-1 and maze[row][col+1] == 0:
+        if col < len(maze)-1 and maze[row][col+1] == 0:
             neighbors.append((row, col+1))
 
-        # If there are no unvisited neighbors, backtrack
-        if not neighbors:
-            return
+        # Randomly select an unvisited neighbor
+        if neighbors:
+            next_row, next_col = random.choice(neighbors)
 
-        # Choose a random unvisited neighbor
-        n_row, n_col = random.choice(neighbors)
+            # Carve a path to the neighbor
+            if next_row < row:
+                maze[row-1][col] = 1
+            elif next_row > row:
+                maze[row+1][col] = 1
+            elif next_col < col:
+                maze[row][col-1] = 1
+            elif next_col > col:
+                maze[row][col+1] = 1
 
-        # Remove the wall between the current cell and the chosen neighbor
-        if n_row < row:
-            maze[row][col] &= ~0b1000 # remove North wall
-            maze[n_row][n_col] &= ~0b0010 # remove South wall
-        elif n_row > row:
-            maze[row][col] &= ~0b0010 # remove South wall
-            maze[n_row][n_col] &= ~0b1000 # remove North wall
-        elif n_col < col:
-            maze[row][col] &= ~0b0100 # remove West wall
-            maze[n_row][n_col] &= ~0b0001 # remove East wall
-        elif n_col > col:
-            maze[row][col] &= ~0b0001 # remove East wall
-            maze[n_row][n_col] &= ~0b0100 # remove West wall
+            # Recursively carve paths from the neighbor
+            self.carve_path(next_row, next_col, maze)
 
-        # Check if the chosen neighbor is next to the finishing line
-        if (n_row == finish_row and n_col == finish_col-1) or (n_row == finish_row-1 and n_col == finish_col-1):
-            # If the neighbor is next to the finishing line, remove the wall between them and finish carving the path
-            if n_row < row:
-                maze[n_row][n_col] &= ~0b0010 # remove South wall
-            elif n_row > row:
-                maze[n_row][n_col] &= ~0b1000 # remove
+    def generate(self):
+        # Start carving paths from the top-left corner
+        self.carve_path(0, 0, self.maze)
 
-        # Recursively carve a path through the neighbor
-        self.carve_path(n_row, n_col, finish_row,finish_col,maze)
+        # Fix the endpoint in a random j coord in the last 2 rows of the matrix
+        endpoint_j = random.randint(0, self.n-1)
+        endpoint_i = random.randint(self.n-2, self.n-1)
+        self.maze[endpoint_i][endpoint_j] = 1
+
+        return self.maze
