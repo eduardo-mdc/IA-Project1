@@ -107,8 +107,8 @@ class BlockState:
                     return True
         return False
     
-    """ def check_goal(new_state, maze):
+    def check_goal(new_state, maze):
         if(new_state.orientation == None):
-                if(maze[new_state.x][new_state.y-1] == GOAL):
+                if(maze[new_state.x][new_state.y-1] == 3):
                     return True
-        return False """
+        return False
