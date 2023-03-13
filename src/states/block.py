@@ -109,6 +109,6 @@ class BlockState:
     
     def check_goal(new_state, maze):
         if(new_state.orientation == None):
-                if(maze[new_state.x][new_state.y-1] == 3):
+                if(maze[new_state.x][new_state.y-1] == 9):
                     return True
         return False
