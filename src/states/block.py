@@ -86,3 +86,29 @@ class BlockState:
         (maze[state.x-0.5][state.y+1] == 1 and maze[state.x+0.5][state.y+1] == 2) and
         (maze[state.x-0.5][state.y+1] == 2 and maze[state.x+0.5][state.y+1] == 1))):
             return BlockState(True, "horizontal", state.x+1, state.y+1)
+        
+    def check_valid_move(new_state, maze):
+        if(new_state.fallen == True):
+            if(new_state.orientation == "vertical"):
+                if(maze[new_state.x][new_state.y-0.5] == 0 and maze[new_state.x][new_state.y+0.5] == 0):
+                    return False
+            if(new_state.orientation == "horizontal"):
+                if(maze[new_state.x-0.5][new_state.y] == 0 and maze[new_state.x+0.5][new_state.y] == 0):
+                    return False
+        else:
+            if(new_state.orientation == None):
+                if(maze[new_state.x][new_state.y-1] == 0):
+                    return False
+        return True
+    
+    def check_hole(new_state, maze):
+        if(new_state.orientation == None):
+                if(maze[new_state.x][new_state.y-1] == 2):
+                    return True
+        return False
+    
+    """ def check_goal(new_state, maze):
+        if(new_state.orientation == None):
+                if(maze[new_state.x][new_state.y-1] == GOAL):
+                    return True
+        return False """
