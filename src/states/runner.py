@@ -9,10 +9,20 @@ class Runner(GameState):
     def __init__(self,display_surf,size,config):
         super().__init__(display_surf,size)
         self._config = config
+
+        self._finishX = 0
+        self._finishY = 0
+        self._initialX = 0
+        self._initialY = 0
         self._create_visual_matrix()
         self.maze = self.generate_maze(self._config['game']['matrix_size'],self._config['game']['matrix_size'])
-        self.block_position = [0, 0] # The position of the block in the maze
+        
+        self.block_position = [self._initialX, self._initialY] # The position of the block in the maze
     
+       
+        for i in self.maze:
+         print('\t'.join(map(str, i)))
+         
     def _create_visual_matrix(self):
         self._width = self._size[0]
         self._height = self._size[1]
@@ -55,29 +65,27 @@ class Runner(GameState):
                     text = font.render('O', True, colors['GREEN'])
                     text_rect = text.get_rect(center=(int(x+self._square_width/2), int(y+self._square_height/2)))
                     self._display_surf.blit(text, text_rect)
+
     def generate_maze(self, width, height):
         # Create a 2D grid with all walls intact
         maze = [[0] * width for _ in range(height)]
 
         # Choose a random finishing line
-        finish_row = random.randint(height-2, height-1)
-        finish_col = random.randint(0, width-1)
-
+        self._finishX  = random.randint(height-2, height-1)
+        self._finishY = random.randint(0, width-1)
+     
         # Call the recursive backtracking algorithm to carve a path through the maze
-        self.carve_path(finish_row, finish_col, maze)
-
-        # Remove the walls at the entrance and exit
-        maze[0][0:2] = [1, 1]
-        maze[finish_row][finish_col-1:finish_col+1] = [1, 1]
-
+       # self.carve_path(self._finishX, self._finishY, maze)
+        maze = self.generate(maze)
+       
         return maze
         
     
     def carve_path(self, row, col, maze):
-        # Mark the current cell as visited
+    # Mark the current cell as visited
         maze[row][col] = 1
 
-        # Create a list of unvisited neighbors
+    # Create a list of unvisited neighbors
         neighbors = []
         if row > 0 and maze[row-1][col] == 0:
             neighbors.append((row-1, col))
@@ -102,16 +110,24 @@ class Runner(GameState):
             elif next_col > col:
                 maze[row][col+1] = 1
 
+            # If the neighbor is the start or end point, mark it in the maze
+            if (next_row, next_col) == (self._initialX, self._initialY):
+                maze[next_row][next_col] = 2
+                print("initial")
+            elif (next_row, next_col) == (self._finishX, self._finishY):
+                maze[next_row][next_col] = 3
+                print("finish")
+
             # Recursively carve paths from the neighbor
             self.carve_path(next_row, next_col, maze)
 
-    def generate(self):
-        # Start carving paths from the top-left corner
-        self.carve_path(0, 0, self.maze)
 
-        # Fix the endpoint in a random j coord in the last 2 rows of the matrix
-        endpoint_j = random.randint(0, self.n-1)
-        endpoint_i = random.randint(self.n-2, self.n-1)
-        self.maze[endpoint_i][endpoint_j] = 1
+    def generate(self, maze):
+        # Start carving paths from the bottom-right corner
+        self.carve_path(self._initialX, self._initialY, maze)
 
-        return self.maze
+        # Fix the start and finish points in the maze
+        maze[self._initialX][self._initialY] = 2
+        maze[self._finishX][self._finishY] = 3
+
+        return maze
