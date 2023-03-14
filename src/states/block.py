@@ -89,45 +89,31 @@ class BlockState:
         
     def child_block_states(state, maze):
         new_states = []
-        if(fall_r(state, maze)):
-            new_states.append(fall_r(state, maze))
-        if(fall_l(state, maze)):
+        if(BlockState.fall_r(state, maze)):
+            new_states.append(BlockState.fall_r(state, maze))
+        if(BlockState.fall_l(state, maze)):
             new_states.append(fall_l(state, maze))
-        if(fall_d(state, maze)):
-            new_states.append(fall_d(state, maze))
-        if(fall_u(state, maze)):
-            new_states.append(fall_u(state, maze))
-        if(get_up_r(state, maze)):
-            new_states.append(get_up_r(state, maze))
-        if(get_up_l(state, maze)):
-            new_states.append(get_up_l(state, maze))
-        if(get_up_d(state, maze)):
-            new_states.append(get_up_d(state, maze))
-        if(get_up_u(state, maze)):
-            new_states.append(get_up_u(state, maze))
-        if(roll_r(state, maze)):
-            new_states.append(roll_r(state, maze))
-        if(roll_l(state, maze)):
-            new_states.append(roll_l(state, maze))
-        if(roll_d(state, maze)):
-            new_states.append(roll_d(state, maze))
-        if(roll_u(state, maze)):
-            new_states.append(roll_u(state, maze))
+        if(BlockState.fall_d(state, maze)):
+            new_states.append(BlockState.fall_d(state, maze))
+        if(BlockState.fall_u(state, maze)):
+            new_states.append(BlockState.fall_u(state, maze))
+        if(BlockState.get_up_r(state, maze)):
+            new_states.append(BlockState.get_up_r(state, maze))
+        if(BlockState.get_up_l(state, maze)):
+            new_states.append(BlockState.get_up_l(state, maze))
+        if(BlockState.get_up_d(state, maze)):
+            new_states.append(BlockState.get_up_d(state, maze))
+        if(BlockState.get_up_u(state, maze)):
+            new_states.append(BlockState.get_up_u(state, maze))
+        if(BlockState.roll_r(state, maze)):
+            new_states.append(BlockState.roll_r(state, maze))
+        if(BlockState.roll_l(state, maze)):
+            new_states.append(BlockState.roll_l(state, maze))
+        if(BlockState.roll_d(state, maze)):
+            new_states.append(BlockState.roll_d(state, maze))
+        if(BlockState.roll_u(state, maze)):
+            new_states.append(BlockState.roll_u(state, maze))
         return new_states
-
-    def check_valid_move(new_state, maze):
-        if(new_state.fallen == True):
-            if(new_state.orientation == "vertical"):
-                if(maze[new_state.x][new_state.y-0.5] == 0 and maze[new_state.x][new_state.y+0.5] == 0):
-                    return False
-            if(new_state.orientation == "horizontal"):
-                if(maze[new_state.x-0.5][new_state.y] == 0 and maze[new_state.x+0.5][new_state.y] == 0):
-                    return False
-        else:
-            if(new_state.orientation == None):
-                if(maze[new_state.x][new_state.y-1] == 0):
-                    return False
-        return True
     
     def check_hole(new_state, maze):
         if(new_state.orientation == None):
