@@ -11,6 +11,9 @@ class GameHandler:
         self._getConfiguration("config.json")
         self.menu = MainMenu(display_surf, size)
         self.runner = Runner(display_surf, size,self._config)
+    
+    def printMoves(self):
+        print(self.runner.player.getMoves())
 
     def _getConfiguration(self,config_path):
         with open(config_path) as file:

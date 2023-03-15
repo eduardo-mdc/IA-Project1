@@ -1,5 +1,5 @@
 class GameState:
-    def __init__(self,display_surf, size):
+    def __init__(self,display_surf, size, initial_position):
         self._display_surf = display_surf
         self._size = size
 

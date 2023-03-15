@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from states.gamestate import *
+from states.player import *
 from main import * 
 import random
 
@@ -15,13 +16,17 @@ class Runner(GameState):
         self._initialX = 0
         self._initialY = 0
         self._create_visual_matrix()
-        self.maze = self.generate_maze(self._config['game']['matrix_size'],self._config['game']['matrix_size'])
-        
+
+        size = 10
+        start = (0, 0)
+        end = (size-1, size-1)
+        dead_end_prob = 0.2
+
+        self.maze = generate_matrix(size, start, end, dead_end_prob)
         self.block_position = [self._initialX, self._initialY] # The position of the block in the maze
-    
+        self.player = Player(self.maze,self.block_position)
        
-        for i in self.maze:
-         print('\t'.join(map(str, i)))
+    
          
     def _create_visual_matrix(self):
         self._width = self._size[0]
@@ -66,68 +71,48 @@ class Runner(GameState):
                     text_rect = text.get_rect(center=(int(x+self._square_width/2), int(y+self._square_height/2)))
                     self._display_surf.blit(text, text_rect)
 
-    def generate_maze(self, width, height):
-        # Create a 2D grid with all walls intact
-        maze = [[0] * width for _ in range(height)]
+def generate_matrix(size, start, end, dead_end_prob=0.7):
+    # Initialize the matrix with zeros
+    matrix = [[0 for _ in range(size)] for _ in range(size)]
 
-        # Choose a random finishing line
-        self._finishX  = random.randint(height-2, height-1)
-        self._finishY = random.randint(0, width-1)
-     
-        # Call the recursive backtracking algorithm to carve a path through the maze
-       # self.carve_path(self._finishX, self._finishY, maze)
-        maze = self.generate(maze)
-       
-        return maze
-        
-    
-    def carve_path(self, row, col, maze):
-    # Mark the current cell as visited
-        maze[row][col] = 1
+    # Set the starting and ending points
+    i, j = start
+    matrix[i][j] = 8
+    i, j = end
+    matrix[i][j] = 9
 
-    # Create a list of unvisited neighbors
+    # Generate random dead ends in the matrix
+    for i in range(size):
+        for j in range(size):
+            if matrix[i][j] != 0:
+                continue
+            if random.random() < dead_end_prob:
+                matrix[i][j] = 0
+
+    # Generate a solution path from start to end
+    path = [(start[0], start[1])]
+    i, j = start
+    while (i, j) != end:
+        # Find the neighboring cells that are not dead ends or part of the path
         neighbors = []
-        if row > 0 and maze[row-1][col] == 0:
-            neighbors.append((row-1, col))
-        if row < len(maze)-1 and maze[row+1][col] == 0:
-            neighbors.append((row+1, col))
-        if col > 0 and maze[row][col-1] == 0:
-            neighbors.append((row, col-1))
-        if col < len(maze)-1 and maze[row][col+1] == 0:
-            neighbors.append((row, col+1))
-
-        # Randomly select an unvisited neighbor
+        if i > 0 and matrix[i-1][j] not in (1, 2):
+            neighbors.append((i-1, j))
+        if j > 0 and matrix[i][j-1] not in (1, 2):
+            neighbors.append((i, j-1))
+        if i < size-1 and matrix[i+1][j] not in (1, 2):
+            neighbors.append((i+1, j))
+        if j < size-1 and matrix[i][j+1] not in (1, 2):
+            neighbors.append((i, j+1))
+        # Choose a random neighbor and mark it as part of the path
         if neighbors:
-            next_row, next_col = random.choice(neighbors)
+            i, j = random.choice(neighbors)
+            path.append((i, j))
+            # Mark the cell as part of the path, unless it's the starting or ending point
+            if (i, j) != start and (i, j) != end:
+                matrix[i][j] = 1
+        # If there are no neighbors available, backtrack to the previous cell
+        else:
+            i, j = path[-1]
+            path.pop()
 
-            # Carve a path to the neighbor
-            if next_row < row:
-                maze[row-1][col] = 1
-            elif next_row > row:
-                maze[row+1][col] = 1
-            elif next_col < col:
-                maze[row][col-1] = 1
-            elif next_col > col:
-                maze[row][col+1] = 1
-
-            # If the neighbor is the start or end point, mark it in the maze
-            if (next_row, next_col) == (self._initialX, self._initialY):
-                maze[next_row][next_col] = 2
-                print("initial")
-            elif (next_row, next_col) == (self._finishX, self._finishY):
-                maze[next_row][next_col] = 3
-                print("finish")
-
-            # Recursively carve paths from the neighbor
-            self.carve_path(next_row, next_col, maze)
-
-
-    def generate(self, maze):
-        # Start carving paths from the bottom-right corner
-        self.carve_path(self._initialX, self._initialY, maze)
-
-        # Fix the start and finish points in the maze
-        maze[self._initialX][self._initialY] = 2
-        maze[self._finishX][self._finishY] = 3
-
-        return maze
+    return matrix
