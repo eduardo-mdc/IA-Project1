@@ -17,12 +17,13 @@ class Runner(GameState):
         self._initialY = 0
         self._create_visual_matrix()
 
-        size = 10
+        size = self._config['game']['matrix_size']
         start = (0, 0)
         end = (size-1, size-1)
         dead_end_prob = 0.2
 
         self.maze = generate_matrix(size, start, end, dead_end_prob)
+        print_matrix(self.maze,size)
         self.block_position = [self._initialX, self._initialY] # The position of the block in the maze
         self.player = Player(self.maze,self.block_position)
        
@@ -58,7 +59,7 @@ class Runner(GameState):
                 # Draw the block
                 if [row, col] == self.block_position:
                     pygame.draw.rect(self._display_surf, colors['RED'], (x, y, self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
-                padding =0 
+
                 # Draw the start cell as X and finish cell as O
                 if (row, col) == (0, 0):
                     font = pygame.font.Font(None, int(self._square_height*0.8))
@@ -116,3 +117,12 @@ def generate_matrix(size, start, end, dead_end_prob=0.7):
             path.pop()
 
     return matrix
+
+
+def print_matrix(matrix,size):
+    print("Game Matrix")
+    
+    for i in range(size):
+        for j in range(size):
+            print(matrix[i][j], end=" ")
+        print('\n')
