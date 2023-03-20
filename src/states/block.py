@@ -38,47 +38,47 @@ class BlockState:
         
     # orientation guardada como string? nao gostei
     def get_up_r(self, maze):
-        if(self.fallen == True and self.orientation == "horizontal" and maze[self.y][self.x+1.5] == 1):
+        if(self.fallen == True and self.orientation == "horizontal" and maze[self.y][int(self.x+1.5)] == 1):
             return BlockState(self.x+1.5, self.y,False, None)
         
     def get_up_l(self, maze):
-        if(self.fallen == True and self.orientation == "horizontal" and maze[self.y][self.x-1.5] == 1):
+        if(self.fallen == True and self.orientation == "horizontal" and maze[self.y][int(self.x-1.5)] == 1):
             return BlockState(self.x-1.5, self.y,False, None)
         
     def get_up_u(self, maze):
-        if(self.fallen == True and self.orientation == "vertical" and maze[self.y-1.5][self.x] == 1):
+        if(self.fallen == True and self.orientation == "vertical" and maze[int(self.y-1.5)][self.x] == 1):
             return BlockState(self.x, self.y-1.5,False, None)
 
     def get_up_d(self, maze):
-        if(self.fallen == True and self.orientation == "vertical" and maze[self.y+1.5][self.x] == 1):
+        if(self.fallen == True and self.orientation == "vertical" and maze[int(self.y+1.5)][self.x] == 1):
             return BlockState(self.x, self.y+1.5,False, None)
         
     def roll_r(self, maze):
         if (self.fallen == True and self.orientation == "vertical" and
-        ((maze[self.y-0.5][self.x+1] == 1 and maze[self.y+0.5][self.x+1] == 1) or
-        (maze[self.y-0.5][self.x+1] == 1 and maze[self.y+0.5][self.x+1] == 2) or
-        (maze[self.y-0.5][self.x+1] == 2 and maze[self.y+0.5][self.x+1] == 1))):
+        ((maze[int(self.y-0.5)][self.x+1] == 1 and maze[int(self.y+0.5)][self.x+1] == 1) or
+        (maze[int(self.y-0.5)][self.x+1] == 1 and maze[int(self.y+0.5)][self.x+1] == 2) or
+        (maze[int(self.y-0.5)][self.x+1] == 2 and maze[int(self.y+0.5)][self.x+1] == 1))):
             return BlockState(self.x+1, self.y,True, "horizontal")
         
     def roll_l(self, maze):
         if (self.fallen == True and self.orientation == "vertical" and
-        ((maze[self.y-0.5][self.x-1] == 1 and maze[sef.y+0.5][self.x-1] == 1) or
-        (maze[self.y-0.5][self.x-1] == 1 and maze[self.y+0.5][self.x-1] == 2) or
-        (maze[self.y-0.5][self.x-1] == 2 and maze[self.y+0.5][self.x-1] == 1))):
+        ((maze[int(self.y-0.5)][self.x-1] == 1 and maze[int(self.y+0.5)][self.x-1] == 1) or
+        (maze[int(self.y-0.5)][self.x-1] == 1 and maze[int(self.y+0.5)][self.x-1] == 2) or
+        (maze[int(self.y-0.5)][self.x-1] == 2 and maze[int(self.y+0.5)][self.x-1] == 1))):
             return BlockState(self.x-1, self.y,True, "horizontal")
         
     def roll_u(self, maze):
         if (self.fallen == True and self.orientation == "horizontal" and
-        ((maze[self.y-1][self.x-0.5] == 1 and maze[self.y-1][self.x+0.5] == 1) or
-        (maze[self.y-1][self.x-0.5] == 1 and maze[self.y-1][self.x+0.5] == 2) or
-        (maze[self.y-1][self.x-0.5] == 2 and maze[self.y-1][self.x+0.5] == 1))):
+        ((maze[self.y-1][int(self.x-0.5)] == 1 and maze[self.y-1][int(self.x+0.5)] == 1) or
+        (maze[self.y-1][int(self.x-0.5)] == 1 and maze[self.y-1][int(self.x+0.5)] == 2) or
+        (maze[self.y-1][int(self.x-0.5)] == 2 and maze[self.y-1][int(self.x+0.5)] == 1))):
             return BlockState(self.x, self.y-1,True, "horizontal")
         
     def roll_d(self, maze):
         if (self.fallen == True and self.orientation == "horizontal" and
-        ((maze[self.y+1][self.x-0.5] == 1 and maze[self.y+1][self.x+0.5] == 1) or
-        (maze[self.y+1][self.x-0.5] == 1 and maze[self.y+1][self.x+0.5] == 2) or
-        (maze[self.y+1][self.x-0.5] == 2 and maze[self.y+1][self.x+0.5] == 1))):
+        ((maze[self.y+1][int(self.x-0.5)] == 1 and maze[self.y+1][int(self.x+0.5)] == 1) or
+        (maze[self.y+1][int(self.x-0.5)] == 1 and maze[self.y+1][int(self.x+0.5)] == 2) or
+        (maze[self.y+1][int(self.x-0.5)] == 2 and maze[self.y+1][int(self.x+0.5)] == 1))):
             return BlockState(self.x+1, self.y+1,True, "horizontal")
         
     def child_block_states(self, maze):
