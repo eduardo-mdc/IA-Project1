@@ -26,6 +26,7 @@ class Runner(GameState):
         print_matrix(self.maze,size)
         self.block_position = [self._initialX, self._initialY] # The position of the block in the maze
         self.player = Player(self.maze,self.block_position)
+        self.inputs = []
        
     
          
@@ -71,6 +72,16 @@ class Runner(GameState):
                     text = font.render('O', True, colors['GREEN'])
                     text_rect = text.get_rect(center=(int(x+self._square_width/2), int(y+self._square_height/2)))
                     self._display_surf.blit(text, text_rect)
+        
+    def add_input(self, input):
+        self.inputs.append(input)
+
+    def process_input(self):
+        moves = self.player.getMoves()
+        if len(self.inputs) != 0:
+            arrow = self.inputs.pop()
+            for move in moves:
+                self.player._block_state.process_move(move, arrow)
 
 def generate_matrix(size, start, end, dead_end_prob=0.7):
     # Initialize the matrix with zeros
