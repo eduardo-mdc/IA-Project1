@@ -21,7 +21,7 @@ class App:
     def __init__(self):
         self._running = True
         self._display_surf = None
-        self._screenSize = [800,800]
+        self._screenSize = [400,400]
         self.size = self.weight, self.height = self._screenSize[0], self._screenSize[1]
  
     def on_init(self):
@@ -34,8 +34,17 @@ class App:
     def on_event(self, event):
         if event.type == pygame.QUIT:
             self._running = False
-        if event.type == events['START_GAME']:
+        elif event.type == events['START_GAME']:
             self._handler.state = 'running'
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+            self._handler.runner.add_input("left")
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+            self._handler.runner.add_input("right")
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+            self._handler.runner.add_input("up")
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+            self._handler.runner.add_input("left")
+
 
     #compute changes in the game world
     def on_loop(self):
@@ -43,7 +52,7 @@ class App:
             case 'menu':
                 pass
             case 'running':
-                pass
+                self._handler.runner.process_input()
 
 
     #prints out screen graphics
