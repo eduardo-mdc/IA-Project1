@@ -62,7 +62,7 @@ class BlockState:
         
     def roll_l(self, maze):
         if (self.fallen == True and self.orientation == "vertical" and
-        ((maze[self.y-0.5][self.x-1] == 1 and maze[self.y+0.5][self.x-1] == 1) or
+        ((maze[self.y-0.5][self.x-1] == 1 and maze[sef.y+0.5][self.x-1] == 1) or
         (maze[self.y-0.5][self.x-1] == 1 and maze[self.y+0.5][self.x-1] == 2) or
         (maze[self.y-0.5][self.x-1] == 2 and maze[self.y+0.5][self.x-1] == 1))):
             return BlockState(self.x-1, self.y,True, "horizontal")
@@ -119,44 +119,7 @@ class BlockState:
         if(new_state.orientation == None):
                 if(maze[new_state.y-1][new_state.x] == 9):
                     return True
-        return False
-    
-    def process_move(self, move, direction):
-        if direction == "left":
-            match move:
-                case "fall_l":
-                    self.player._block_state = self.player._block_state.fall_l(self.maze)
-                case "get_up_l":
-                    self.player._block_state = self.player._block_state.get_up_l(self.maze)
-                case "roll_l":
-                    self.player._block_state = self.player._block_state.roll_l(self.maze)
-
-        elif direction == "right":
-            match move:
-                case "fall_r":
-                    self.player._block_state = self.player._block_state.fall_r(self.maze)
-                case "get_up_r":
-                    self.player._block_state = self.player._block_state.get_up_r(self.maze)
-                case "roll_r":
-                    self.player._block_state = self.player._block_state.roll_r(self.maze)
-
-        elif direction == "down":
-            match move:
-                case "fall_d":
-                    self.player._block_state = self.player._block_state.fall_d(self.maze)
-                case "get_up_d":
-                    self.player._block_state = self.player._block_state.get_up_d(self.maze)
-                case "roll_d":
-                    self.player._block_state = self.player._block_state.roll_d(self.maze)
-
-        elif direction == "up":
-            match move:
-                case "fall_u":
-                    self.player._block_state = self.player._block_state.fall_u(self.maze)
-                case "get_up_u":
-                    self.player._block_state = self.player._block_state.get_up_u(self.maze)
-                case "roll_u":
-                    self.player._block_state = self.player._block_state.roll_u(self.maze)
+        return False        
     
     def __str__(self):
         output = 'BlockState <'+ str(id(self)) +'>\n'

@@ -42,8 +42,8 @@ class App:
             self._handler.runner.add_input("right")
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
             self._handler.runner.add_input("up")
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-            self._handler.runner.add_input("left")
+        elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+            self._handler.runner.add_input("down")
 
 
     #compute changes in the game world
