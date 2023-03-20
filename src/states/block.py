@@ -9,76 +9,76 @@ class BlockState:
         print("WARNING : Call to display() on <Block> Class")
 
     def fall_r(self, maze):
-        if (self.fallen == False and self.orientation == None and
-        ((maze[self.y][self.x+1] == 1 and maze[self.x+2][self.y] == 1) or
-        (maze[self.y][self.x+1] == 1 and maze[self.x+2][self.y] == 2) or
-        (maze[self.y][self.x+1] == 2 and maze[self.x+2][self.y] == 1))):
+        if (self.x <= len(maze) - 2 and self.fallen == False and self.orientation == None and
+        ((maze[self.y][self.x+1] == 1 and maze[self.y][self.x+2] == 1) or
+        (maze[self.y][self.x+1] == 1 and maze[self.y][self.x+2] == 2) or
+        (maze[self.y][self.x+1] == 2 and maze[self.y][self.x+2] == 1))):
             return BlockState(self.x+1.5, self.y,True, "horizontal")
         
     def fall_l(self, maze):
-        if (self.fallen == False and self.orientation == None and
-        ((maze[self.x-1][self.y] == 1 and maze[self.x-2][self.y] == 1) or
-        (maze[self.x-1][self.y] == 1 and maze[self.x-2][self.y] == 2) or
-        (maze[self.x-1][self.y] == 2 and maze[self.x-2][self.y] == 1))):
+        if (self.x >= 2 and self.fallen == False and self.orientation == None and
+        ((maze[self.y][self.x-1] == 1 and maze[self.y][self.x-2] == 1) or
+        (maze[self.y][self.x-1] == 1 and maze[self.y][self.x-2] == 2) or
+        (maze[self.y][self.x-1] == 2 and maze[self.y][self.x-2] == 1))):
             return BlockState(self.x-1.5, self.y,True, "horizontal")
         
     def fall_u(self, maze):
-        if (self.fallen == False and self.orientation == None and
-        ((maze[self.x][self.y-1] == 1 and maze[self.x][self.y-2] == 1) or
-        (maze[self.x][self.y-1] == 1 and maze[self.x][self.y-2] == 2) or
-        (maze[self.x][self.y-1] == 2 and maze[self.x][self.y-2] == 1))):
-            return BlockState(self.x, self.y-1.5,True, "horizontal")
+        if (self.y >= 2 and self.fallen == False and self.orientation == None and
+        ((maze[self.y-1][self.x] == 1 and maze[self.y-2][self.x] == 1) or
+        (maze[self.y-1][self.x] == 1 and maze[self.y-2][self.x] == 2) or
+        (maze[self.y-1][self.x] == 2 and maze[self.y-2][self.x] == 1))):
+            return BlockState(self.x, self.y-1.5,True, "vertical")
         
     def fall_d(self, maze):
-        if (self.fallen == False and self.orientation == None and
-        ((maze[self.x][self.y+1] == 1 and maze[self.x][self.y+2] == 1) or
-        (maze[self.x][self.y+1] == 1 and maze[self.x][self.y+2] == 2) or
-        (maze[self.x][self.y+1] == 2 and maze[self.x][self.y+2] == 1))):
-            return BlockState(self.x, self.y+1.5,True, "horizontal")
+        if (self.y <= len(maze) - 2 and self.fallen == False and self.orientation == None and
+        ((maze[self.y+1][self.x] == 1 and maze[self.y+2][self.x] == 1) or
+        (maze[self.y+1][self.x] == 1 and maze[self.y+2][self.x] == 2) or
+        (maze[self.y+1][self.x] == 2 and maze[self.y+2][self.x] == 1))):
+            return BlockState(self.x, self.y+1.5,True, "vertical")
         
     # orientation guardada como string? nao gostei
     def get_up_r(self, maze):
-        if(self.fallen == True and self.orientation == "horizontal" and maze[self.x+1.5][self.y] == 1):
+        if(self.fallen == True and self.orientation == "horizontal" and maze[self.y][self.x+1.5] == 1):
             return BlockState(self.x+1.5, self.y,False, None)
         
     def get_up_l(self, maze):
-        if(self.fallen == True and self.orientation == "horizontal" and maze[self.x-1.5][self.y] == 1):
+        if(self.fallen == True and self.orientation == "horizontal" and maze[self.y][self.x-1.5] == 1):
             return BlockState(self.x-1.5, self.y,False, None)
         
     def get_up_u(self, maze):
-        if(self.fallen == True and self.orientation == "vertical" and maze[self.x][self.y-1.5] == 1):
+        if(self.fallen == True and self.orientation == "vertical" and maze[self.y-1.5][self.x] == 1):
             return BlockState(self.x, self.y-1.5,False, None)
 
     def get_up_d(self, maze):
-        if(self.fallen == True and self.orientation == "vertical" and maze[self.x][self.y+1.5] == 1):
+        if(self.fallen == True and self.orientation == "vertical" and maze[self.y+1.5][self.x] == 1):
             return BlockState(self.x, self.y+1.5,False, None)
         
     def roll_r(self, maze):
         if (self.fallen == True and self.orientation == "vertical" and
-        ((maze[self.x+1][self.y-0.5] == 1 and maze[self.x+1][self.y+0.5] == 1) or
-        (maze[self.x+1][self.y-0.5] == 1 and maze[self.x+1][self.y+0.5] == 2) or
-        (maze[self.x+1][self.y-0.5] == 2 and maze[self.x+1][self.y+0.5] == 1))):
+        ((maze[self.y-0.5][self.x+1] == 1 and maze[self.y+0.5][self.x+1] == 1) or
+        (maze[self.y-0.5][self.x+1] == 1 and maze[self.y+0.5][self.x+1] == 2) or
+        (maze[self.y-0.5][self.x+1] == 2 and maze[self.y+0.5][self.x+1] == 1))):
             return BlockState(self.x+1, self.y,True, "horizontal")
         
     def roll_l(self, maze):
         if (self.fallen == True and self.orientation == "vertical" and
-        ((maze[self.x-1][self.y-0.5] == 1 and maze[self.x-1][self.y+0.5] == 1) or
-        (maze[self.x-1][self.y-0.5] == 1 and maze[self.x-1][self.y+0.5] == 2) or
-        (maze[self.x-1][self.y-0.5] == 2 and maze[self.x-1][self.y+0.5] == 1))):
+        ((maze[self.y-0.5][self.x-1] == 1 and maze[self.y+0.5][self.x-1] == 1) or
+        (maze[self.y-0.5][self.x-1] == 1 and maze[self.y+0.5][self.x-1] == 2) or
+        (maze[self.y-0.5][self.x-1] == 2 and maze[self.y+0.5][self.x-1] == 1))):
             return BlockState(self.x-1, self.y,True, "horizontal")
         
     def roll_u(self, maze):
         if (self.fallen == True and self.orientation == "horizontal" and
-        ((maze[self.x-0.5][y-1] == 1 and maze[self.x+0.5][self.y-1] == 1) or
-        (maze[self.x-0.5][self.y-1] == 1 and maze[self.x+0.5][self.y-1] == 2) or
-        (maze[self.x-0.5][self.y-1] == 2 and maze[self.x+0.5][self.y-1] == 1))):
+        ((maze[self.y-1][self.x-0.5] == 1 and maze[self.y-1][self.x+0.5] == 1) or
+        (maze[self.y-1][self.x-0.5] == 1 and maze[self.y-1][self.x+0.5] == 2) or
+        (maze[self.y-1][self.x-0.5] == 2 and maze[self.y-1][self.x+0.5] == 1))):
             return BlockState(self.x, self.y-1,True, "horizontal")
         
     def roll_d(self, maze):
         if (self.fallen == True and self.orientation == "horizontal" and
-        ((maze[self.x-0.5][self.y+1] == 1 and maze[self.x+0.5] [self.y+1] == 1) or
-        (maze[self.x-0.5][self.y+1] == 1 and maze[self.x+0.5][self.y+1] == 2) or
-        (maze[self.x-0.5][self.y+1] == 2 and maze[self.x+0.5][self.y+1] == 1))):
+        ((maze[self.y+1][self.x-0.5] == 1 and maze[self.y+1][self.x+0.5] == 1) or
+        (maze[self.y+1][self.x-0.5] == 1 and maze[self.y+1][self.x+0.5] == 2) or
+        (maze[self.y+1][self.x-0.5] == 2 and maze[self.y+1][self.x+0.5] == 1))):
             return BlockState(self.x+1, self.y+1,True, "horizontal")
         
     def child_block_states(self, maze):
@@ -111,13 +111,13 @@ class BlockState:
     
     def check_hole(new_state, maze):
         if(new_state.orientation == None):
-                if(maze[new_state.x][new_state.y-1] == 2):
+                if(maze[new_state.y-1][new_state.x] == 2):
                     return True
         return False
     
     def check_goal(new_state, maze):
         if(new_state.orientation == None):
-                if(maze[new_state.x][new_state.y-1] == 9):
+                if(maze[new_state.y-1][new_state.x] == 9):
                     return True
         return False
     
