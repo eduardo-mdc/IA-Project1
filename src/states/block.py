@@ -36,26 +36,25 @@ class BlockState:
             (maze[self.y+1][self.x] == 2 and maze[self.y+2][self.x] == 1))):
                 return BlockState(self.x, self.y+1.5,True, "vertical")
         
-    # orientation guardada como string? nao gostei
     def get_up_r(self, maze):
         if(self.fallen == True and self.orientation == "horizontal"):
             if maze[self.y][int(self.x+1.5)] == 1:
-                return BlockState(self.x+1.5, self.y,False, None)
+                return BlockState(int(self.x+1.5), self.y,False, None)
         
     def get_up_l(self, maze):
         if(self.fallen == True and self.orientation == "horizontal"):
             if maze[self.y][int(self.x-1.5)] == 1:
-                return BlockState(self.x-1.5, self.y,False, None)
+                return BlockState(int(self.x-1.5), self.y,False, None)
         
     def get_up_u(self, maze):
         if(self.fallen == True and self.orientation == "vertical"):
             if maze[int(self.y-1.5)][self.x] == 1:
-                return BlockState(self.x, self.y-1.5,False, None)
+                return BlockState(self.x, int(self.y-1.5),False, None)
 
     def get_up_d(self, maze):
         if(self.fallen == True and self.orientation == "vertical"):
             if maze[int(self.y+1.5)][self.x] == 1:
-                return BlockState(self.x, self.y+1.5,False, None)
+                return BlockState(self.x, int(self.y+1.5),False, None)
         
     def roll_r(self, maze):
         if (self.fallen == True and self.orientation == "vertical"):

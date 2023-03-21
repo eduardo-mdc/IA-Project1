@@ -53,7 +53,10 @@ class Player():
 
     
     def _printChildStates(self):
-        print("Available Moves : \n")
+        print("---Available Moves--- : \n")
         moves = self.getMoves()
         for x in range(len(moves)):
             print (moves[x][0] + ',' + str(moves[x][1]))
+
+    def _printCurrentPosition(self):
+        print("---Player position---: \n" + str(self._block_state))
