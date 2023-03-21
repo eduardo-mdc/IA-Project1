@@ -10,6 +10,12 @@ class Runner(GameState):
     def __init__(self,display_surf,size,config):
         super().__init__(display_surf,size)
         self._config = config
+        self.tile_image = pygame.image.load('src/artset/grass_tile.png')
+        self.void_image = pygame.image.load('src/artset/water_tile.png')
+        self.end_image = pygame.image.load('src/artset/end_tile.png')
+
+        self.player_h = pygame.image.load('src/artset/player_horizontal.png')
+        self.player_v = pygame.image.load('src/artset/player_vertical.png')
 
         self._finishX = 0
         self._finishY = 0
@@ -28,6 +34,8 @@ class Runner(GameState):
         self.player = Player(self.maze,self.block_position)
         self.inputs = []
        
+    def _display_player():
+        pass
     
          
     def _create_visual_matrix(self):
@@ -48,14 +56,17 @@ class Runner(GameState):
                 x = col * self._square_width + self._config['visual']['block_margin']
                 y = row * self._square_height + self._config['visual']['block_margin']
                 
-                # Get the color of the square
+               # Get the color of the square
                 if self.maze[row][col] == 0:
-                    color = colors['BLACK']
+                    self._display_surf.blit(self.void_image, (x, y))
+                    # Draw the PNG tile
+                    pass
                 else:
-                    color = colors['WHITE']
-                
+                    self._display_surf.blit(self.tile_image, (x, y))
+            
+                    
                 # Draw the square
-                pygame.draw.rect(self._display_surf, color, (x, y, self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
+                #  pygame.draw.rect(self._display_surf, color, (x, y, self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
 
                 # Draw the block
                 if [row, col] == self.block_position:
@@ -63,15 +74,9 @@ class Runner(GameState):
 
                 # Draw the start cell as X and finish cell as O
                 if (row, col) == (0, 0):
-                    font = pygame.font.Font(None, int(self._square_height*0.8))
-                    text = font.render('X', True, colors['GREEN'])
-                    text_rect = text.get_rect(center=(int(x+self._square_width/2), int(y+self._square_height/2)))
-                    self._display_surf.blit(text, text_rect)
+                    self._display_surf.blit(self.player_v, (x, y))
                 elif (row, col) == (self._rows-1, self._cols-1):
-                    font = pygame.font.Font(None, int(self._square_height*0.8))
-                    text = font.render('O', True, colors['GREEN'])
-                    text_rect = text.get_rect(center=(int(x+self._square_width/2), int(y+self._square_height/2)))
-                    self._display_surf.blit(text, text_rect)
+                    self._display_surf.blit(self.end_image, (x, y))
         
     def add_input(self, input):
         self.inputs.append(input)

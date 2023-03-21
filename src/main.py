@@ -62,6 +62,7 @@ class App:
                 self._handler.menu.display()
             case 'running':
                 self._handler.runner.display()
+                
         
         pygame.display.flip()
 
