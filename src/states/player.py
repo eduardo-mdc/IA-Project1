@@ -16,11 +16,7 @@ class Player():
         return self._block_state.child_block_states(self._maze)
     
     def _printCurrentState(self):
-        print("Current state : \n")
-        print(str(self._block_state))
-        print(self.maze[self._block_state.x])
-        
-        print("\n")
+       pass
     
     def _printChildStates(self):
         print("Available Moves : \n")
