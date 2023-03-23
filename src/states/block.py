@@ -118,12 +118,14 @@ class BlockState:
                     return True
         return False
     
-    def check_goal(new_state, maze):
-        if(new_state.orientation == None):
-                if(maze[new_state.y-1][new_state.x] == 9):
-                    return True
+    def check_goal(self, maze):
+        if(self.orientation == None and self.fallen == False and maze[self.y][self.x] == 9):
+            return True
         return False        
     
+    def distance_goal(self, maze):
+        return abs(self.x - len(maze) - 1) + abs(self.y - len(maze) - 1)
+
     def __str__(self):
         output = 'BlockState <'+ str(id(self)) +'>\n'
         output += '     X           : '+ str(self.x) +'\n'
