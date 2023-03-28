@@ -86,7 +86,10 @@ class Runner(GameState):
         if len(self.inputs) != 0:
             arrow = self.inputs.pop()
             for move in moves:
-                self.player._block_state.process_move(move, arrow)
+                self.player.process_move(move[0], arrow)
+            self.player._printCurrentPosition()
+            self.player._printChildStates()
+
 
 def generate_matrix(size, start, end, dead_end_prob=0.7):
     # Initialize the matrix with zeros
