@@ -25,12 +25,9 @@ class Runner(GameState):
         self.maze = generate_matrix(size, start, end, dead_end_prob)
         print_matrix(self.maze,size)
         self.block_position = [self._initialX, self._initialY] # The position of the block in the maze
-        self.player = Player(self.maze,self.block_position)
+        self.player = Player(self.maze,self.block_position,self._display_surf)
         self.inputs = []
        
-    def _display_player():
-        pass
-    
          
     def _create_visual_matrix(self):
         self._width = self._size[0]
@@ -39,6 +36,7 @@ class Runner(GameState):
         self._cols = self._config['game']['matrix_size']
         self._square_width = self._width / self._cols
         self._square_height = self._height / self._rows
+
 
         self.tile_image = pygame.image.load('src/artset/grass_tile.png')
         self.void_image = pygame.image.load('src/artset/water_tile.png')
@@ -54,20 +52,19 @@ class Runner(GameState):
         for row in range(self._rows):
             for col in range(self._cols):
                 # Calculate the position of the square
-                x = col * self._square_width + self._config['visual']['block_margin']
-                y = row * self._square_height + self._config['visual']['block_margin']
+                x = col * self._square_width
+                y = row * self._square_height
                 
                # Get the color of the square
                 if self.maze[row][col] == 0:
-                    scaled_image = pygame.transform.scale(self.void_image, (self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
-                elif self.maze[row][col] == 1:
-                    scaled_image = pygame.transform.scale(self.tile_image, (self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
-                elif (row, col) == (0, 0):
-                    scaled_image = pygame.transform.scale(self.player_v, (self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
+                    scaled_image = pygame.transform.scale(self.void_image, (self._square_width, self._square_height))
                 elif (row, col) == (self._rows-1, self._cols-1):
-                    scaled_image = pygame.transform.scale(self.end_image, (self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
+                    scaled_image = pygame.transform.scale(self.end_image, (self._square_width, self._square_height))
+                else:
+                    scaled_image = pygame.transform.scale(self.tile_image, (self._square_width, self._square_height))
                 self._display_surf.blit(scaled_image, (x, y))
 
+        self.player.display(self._square_width,self._square_height)
         
     def add_input(self, input):
         self.inputs.append(input)
