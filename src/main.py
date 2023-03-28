@@ -2,10 +2,12 @@ import pygame
 from pygame.locals import *
 from handler import *
 from states import *
+from states.solver import *
 
 
 events = {
-    "START_GAME" : pygame.USEREVENT + 1
+    "START_GAME" : pygame.USEREVENT + 1,
+    "START_GAME_AI" : pygame.USEREVENT + 2
 }
 
 colors = {
@@ -29,6 +31,7 @@ class App:
         self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
         self._handler = GameHandler(self._display_surf, self.size)
+        self._solver = Solver(self._handler.runner.maze,self._handler.runner.player)
  
     #proceeds events like pressed keys, mouse motion etc
     def on_event(self, event):
@@ -36,6 +39,15 @@ class App:
             self._running = False
         elif event.type == events['START_GAME']:
             self._handler.state = 'running'
+        elif event.type == events['START_GAME_AI']:
+            self._handler.state = 'running_ai'
+            #TEMPORARY
+            solution = self._solver.solve()
+            if(solution):
+                print("Solution :")
+                print(solution.print_parents())
+            else:
+                print("No solution found")
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
             self._handler.runner.add_input("left")
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
@@ -53,7 +65,8 @@ class App:
                 pass
             case 'running':
                 self._handler.runner.process_input()
-
+            case 'running_ai':
+                pass
 
     #prints out screen graphics
     def on_render(self):
@@ -62,8 +75,8 @@ class App:
                 self._handler.menu.display()
             case 'running':
                 self._handler.runner.display()
-                
-        
+            case 'running_ai':
+                pass
         pygame.display.flip()
 
 
