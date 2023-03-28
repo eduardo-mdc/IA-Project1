@@ -61,14 +61,14 @@ class BlockState:
             if(((maze[int(self.y-0.5)][self.x+1] == 1 and maze[int(self.y+0.5)][self.x+1] == 1) or
             (maze[int(self.y-0.5)][self.x+1] == 1 and maze[int(self.y+0.5)][self.x+1] == 2) or
             (maze[int(self.y-0.5)][self.x+1] == 2 and maze[int(self.y+0.5)][self.x+1] == 1))):
-                return BlockState(self.x+1, self.y,True, "horizontal")
+                return BlockState(self.x+1, self.y,True, "vertical")
         
     def roll_l(self, maze):
         if (self.fallen == True and self.orientation == "vertical"):
             if(((maze[int(self.y-0.5)][self.x-1] == 1 and maze[int(self.y+0.5)][self.x-1] == 1) or
             (maze[int(self.y-0.5)][self.x-1] == 1 and maze[int(self.y+0.5)][self.x-1] == 2) or
             (maze[int(self.y-0.5)][self.x-1] == 2 and maze[int(self.y+0.5)][self.x-1] == 1))):
-                return BlockState(self.x-1, self.y,True, "horizontal")
+                return BlockState(self.x-1, self.y,True, "vertical")
             
     def roll_u(self, maze):
         if (self.fallen == True and self.orientation == "horizontal"):
@@ -82,7 +82,7 @@ class BlockState:
             if(((maze[self.y+1][int(self.x-0.5)] == 1 and maze[self.y+1][int(self.x+0.5)] == 1) or
             (maze[self.y+1][int(self.x-0.5)] == 1 and maze[self.y+1][int(self.x+0.5)] == 2) or
             (maze[self.y+1][int(self.x-0.5)] == 2 and maze[self.y+1][int(self.x+0.5)] == 1))):
-                return BlockState(self.x+1, self.y+1,True, "horizontal")
+                return BlockState(self.x, self.y+1,True, "horizontal")
         
     def child_block_states(self, maze):
         new_states = []
@@ -126,6 +126,13 @@ class BlockState:
     def distance_goal(self, maze):
         return abs(self.x - len(maze) - 1) + abs(self.y - len(maze) - 1)
 
+
+    def print_children(self,maze):
+        print("---Available Moves--- : \n")
+        moves = self.child_block_states(maze)
+        for x in range(len(moves)):
+            print (moves[x][0] + ',' + str(moves[x][1]))
+    
     def __str__(self):
         output = 'BlockState <'+ str(id(self)) +'>\n'
         output += '     X           : '+ str(self.x) +'\n'
@@ -133,3 +140,10 @@ class BlockState:
         output += '     Fallen      : '+ str(self.fallen) +'\n'
         output += '     Orientation : '+ str(self.orientation) +'\n'
         return output
+    
+    '''needed for the visited list'''
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        else:
+            return False
