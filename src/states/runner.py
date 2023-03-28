@@ -10,12 +10,6 @@ class Runner(GameState):
     def __init__(self,display_surf,size,config):
         super().__init__(display_surf,size)
         self._config = config
-        self.tile_image = pygame.image.load('src/artset/grass_tile.png')
-        self.void_image = pygame.image.load('src/artset/water_tile.png')
-        self.end_image = pygame.image.load('src/artset/end_tile.png')
-
-        self.player_h = pygame.image.load('src/artset/player_horizontal.png')
-        self.player_v = pygame.image.load('src/artset/player_vertical.png')
 
         self._finishX = 0
         self._finishY = 0
@@ -45,6 +39,13 @@ class Runner(GameState):
         self._cols = self._config['game']['matrix_size']
         self._square_width = self._width / self._cols
         self._square_height = self._height / self._rows
+
+        self.tile_image = pygame.image.load('src/artset/grass_tile.png')
+        self.void_image = pygame.image.load('src/artset/water_tile.png')
+        self.end_image = pygame.image.load('src/artset/end_tile.png')
+
+        self.player_h = pygame.image.load('src/artset/player_horizontal.png')
+        self.player_v = pygame.image.load('src/artset/player_vertical.png')
         
     def display(self):
         self._display_surf.fill((colors['BLACK']))
@@ -58,25 +59,15 @@ class Runner(GameState):
                 
                # Get the color of the square
                 if self.maze[row][col] == 0:
-                    self._display_surf.blit(self.void_image, (x, y))
-                    # Draw the PNG tile
-                    pass
-                else:
-                    self._display_surf.blit(self.tile_image, (x, y))
-            
-                    
-                # Draw the square
-                #  pygame.draw.rect(self._display_surf, color, (x, y, self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
-
-                # Draw the block
-                if [row, col] == self.block_position:
-                    pygame.draw.rect(self._display_surf, colors['RED'], (x, y, self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
-
-                # Draw the start cell as X and finish cell as O
-                if (row, col) == (0, 0):
-                    self._display_surf.blit(self.player_v, (x, y))
+                    scaled_image = pygame.transform.scale(self.void_image, (self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
+                elif self.maze[row][col] == 1:
+                    scaled_image = pygame.transform.scale(self.tile_image, (self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
+                elif (row, col) == (0, 0):
+                    scaled_image = pygame.transform.scale(self.player_v, (self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
                 elif (row, col) == (self._rows-1, self._cols-1):
-                    self._display_surf.blit(self.end_image, (x, y))
+                    scaled_image = pygame.transform.scale(self.end_image, (self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
+                self._display_surf.blit(scaled_image, (x, y))
+
         
     def add_input(self, input):
         self.inputs.append(input)
