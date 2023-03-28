@@ -6,10 +6,14 @@ from main import *
 import random
 
 class Player():
-    def __init__(self,maze, initial_position) -> None:
+    def __init__(self,maze,initial_position,display_surf) -> None:
         self._block_state = BlockState(initial_position[0],initial_position[1],False,None)
         self._maze = maze
         self._printChildStates()
+        self._display_surf = display_surf
+        self._vertical_tile = pygame.image.load('src/artset/player_vertical.png')
+        self._fallen_tile = pygame.image.load('src/artset/player_horizontal.png')
+
     
     def getMoves(self):
         return self._block_state.child_block_states(self._maze)
@@ -50,6 +54,19 @@ class Player():
                     self._block_state = self._block_state.get_up_u(self._maze)
                 case "roll_u":
                     self._block_state = self._block_state.roll_u(self._maze)
+
+    def display(self, tile_width, tile_height):
+        if self._block_state.fallen:
+            scaled_image = pygame.transform.scale(self._fallen_tile, (tile_width,tile_height))
+            if(self._block_state.orientation == "horizontal"):
+                self._display_surf.blit(scaled_image, ((self._block_state.x-0.5) * tile_width, self._block_state.y * tile_height))
+                self._display_surf.blit(scaled_image, ((self._block_state.x+0.5) * tile_width, self._block_state.y * tile_height))
+            if(self._block_state.orientation == "vertical"):
+                self._display_surf.blit(scaled_image, (self._block_state.x * tile_width, (self._block_state.y + 0.5) * tile_height))
+                self._display_surf.blit(scaled_image, (self._block_state.x * tile_width, (self._block_state.y - 0.5) * tile_height))
+        else:
+            scaled_image = pygame.transform.scale(self._vertical_tile, (tile_width,tile_height))
+            self._display_surf.blit(scaled_image, (self._block_state.x * tile_width, self._block_state.y * tile_height))
 
     
     def _printChildStates(self):
