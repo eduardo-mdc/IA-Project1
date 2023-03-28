@@ -42,7 +42,12 @@ class App:
         elif event.type == events['START_GAME_AI']:
             self._handler.state = 'running_ai'
             #TEMPORARY
-            self._solver.solve()
+            solution = self._solver.solve()
+            if(solution):
+                print("Solution :")
+                print(solution.print_parents())
+            else:
+                print("No solution found")
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
             self._handler.runner.add_input("left")
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:

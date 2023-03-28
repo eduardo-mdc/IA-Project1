@@ -26,3 +26,10 @@ class TreeNode:
     def __str__(self):
         return str(self.state)
     
+    def print_parents(self):
+        if self.parent is None:
+            print(self)
+        else:
+            self.parent.print_parents()
+            print(self)
+    
