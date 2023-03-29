@@ -7,33 +7,24 @@ import random
 
 
 class Runner(GameState):
-    def __init__(self,display_surf,size,config):
+    def __init__(self,display_surf,size,start,end,matrix_size):
         super().__init__(display_surf,size)
-        self._config = config
+        self._size = size
+        self._init_visual(matrix_size)
 
-        self._finishX = 0
-        self._finishY = 0
-        self._initialX = 0
-        self._initialY = 0
-        self._create_visual_matrix()
-
-        size = self._config['game']['matrix_size']
-        start = (0, 0)
-        end = (size-1, size-1)
         dead_end_prob = 0.2
 
-        self.maze = generate_matrix(size, start, end, dead_end_prob)
-        print_matrix(self.maze,size)
-        self.block_position = [self._initialX, self._initialY] # The position of the block in the maze
-        self.player = Player(self.maze,self.block_position,self._display_surf)
+        self.maze = generate_matrix(matrix_size, start, end, dead_end_prob)
+        print_matrix(self.maze,matrix_size)
+        self.player = Player(self.maze,start,self._display_surf)
         self.inputs = []
        
          
-    def _create_visual_matrix(self):
+    def _init_visual(self,matrix_size):
         self._width = self._size[0]
         self._height = self._size[1]
-        self._rows = self._config['game']['matrix_size']
-        self._cols = self._config['game']['matrix_size']
+        self._rows = matrix_size
+        self._cols = matrix_size
         self._square_width = self._width / self._cols
         self._square_height = self._height / self._rows
 
@@ -122,6 +113,12 @@ def generate_matrix(size, start, end, dead_end_prob=0.7):
         else:
             i, j = path[-1]
             path.pop()
+    
+    i, j = start
+    matrix[i][j] = 1
+    i, j = end
+    matrix[i][j] = 1
+
 
     return matrix
 

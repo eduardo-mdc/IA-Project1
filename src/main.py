@@ -31,7 +31,6 @@ class App:
         self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
         self._running = True
         self._handler = GameHandler(self._display_surf, self.size)
-        self._solver = Solver(self._handler.runner.maze,self._handler.runner.player)
  
     #proceeds events like pressed keys, mouse motion etc
     def on_event(self, event):
@@ -42,7 +41,7 @@ class App:
         elif event.type == events['START_GAME_AI']:
             self._handler.state = 'running_ai'
             #TEMPORARY
-            solution = self._solver.solve()
+            solution = self._handler.solver.solve()
             if(solution):
                 print("Solution :")
                 print(solution.print_parents())

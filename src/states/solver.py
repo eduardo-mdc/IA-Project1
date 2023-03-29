@@ -8,9 +8,10 @@ from collections import deque
 from treenode import *
 
 class Solver:
-    def __init__(self,maze,player):
+    def __init__(self,maze,player,goal):
         self._maze = maze
         self._player = player
+        self._goal = goal
 
     def solve(self):
         moves = self._player.getMoves()
@@ -27,7 +28,7 @@ class Solver:
             node.check_depth()
             print("Current Position")
             print(node.state)
-            if node.state.check_goal(self._maze):   # check goal state
+            if node.state.check_goal(self._goal):   # check goal state
                 return node
             
             if node not in visited:
