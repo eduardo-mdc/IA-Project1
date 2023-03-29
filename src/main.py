@@ -63,7 +63,7 @@ class App:
             case 'menu':
                 pass
             case 'running':
-                self._handler.runner.process_input()
+                self._handler.runner_loop()
             case 'running_ai':
                 pass
 

@@ -68,6 +68,10 @@ class Runner(GameState):
                 self.player.process_move(move[0], arrow)
             self.player._printCurrentPosition()
             self.player._printChildStates()
+    
+    def check_win(self,goal):
+        if self.player._block_state.check_goal(goal):
+            print("Victory!")
 
 
 def generate_matrix(size, start, end, dead_end_prob=0.7):

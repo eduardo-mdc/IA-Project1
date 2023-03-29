@@ -26,6 +26,10 @@ class GameHandler:
         self._end = (self._config['game']['end']['x'],self._config['game']['end']['y'])
         self._matrix_size = self._config['game']['matrix_size']
         
+    def runner_loop(self):
+        self.runner.process_input()
+        self.runner.check_win(self._end)
+
 
         
         
