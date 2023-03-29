@@ -16,7 +16,7 @@ class BlockState:
                 return BlockState(self.x+1.5, self.y,True, "horizontal")
         
     def fall_l(self, maze):
-        if (self.x >= 3 and self.fallen == False and self.orientation == None):
+        if (self.x >= 2 and self.fallen == False and self.orientation == None):
             if(((maze[self.y][self.x-1] == 1 and maze[self.y][self.x-2] == 1) or
             (maze[self.y][self.x-1] == 1 and maze[self.y][self.x-2] == 2) or
             (maze[self.y][self.x-1] == 2 and maze[self.y][self.x-2] == 1))):
@@ -42,7 +42,7 @@ class BlockState:
                 return BlockState(int(self.x+1.5), self.y,False, None)
         
     def get_up_l(self, maze):
-        if(self.x >= 2 and self.fallen == True and self.orientation == "horizontal"):
+        if(self.x >= 1 and self.fallen == True and self.orientation == "horizontal"):
             if maze[self.y][int(self.x-1.5)] == 1:
                 return BlockState(int(self.x-1.5), self.y,False, None)
         
@@ -64,14 +64,14 @@ class BlockState:
                 return BlockState(self.x+1, self.y,True, "vertical")
         
     def roll_l(self, maze):
-        if (self.x >= 2 and self.fallen == True and self.orientation == "vertical"):
+        if (self.x >= 1 and self.fallen == True and self.orientation == "vertical"):
             if(((maze[int(self.y-0.5)][self.x-1] == 1 and maze[int(self.y+0.5)][self.x-1] == 1) or
             (maze[int(self.y-0.5)][self.x-1] == 1 and maze[int(self.y+0.5)][self.x-1] == 2) or
             (maze[int(self.y-0.5)][self.x-1] == 2 and maze[int(self.y+0.5)][self.x-1] == 1))):
                 return BlockState(self.x-1, self.y,True, "vertical")
             
     def roll_u(self, maze):
-        if (self.y >= 2 and self.fallen == True and self.orientation == "horizontal"):
+        if (self.y >= 1 and self.fallen == True and self.orientation == "horizontal"):
             if(((maze[self.y-1][int(self.x-0.5)] == 1 and maze[self.y-1][int(self.x+0.5)] == 1) or
             (maze[self.y-1][int(self.x-0.5)] == 1 and maze[self.y-1][int(self.x+0.5)] == 2) or
             (maze[self.y-1][int(self.x-0.5)] == 2 and maze[self.y-1][int(self.x+0.5)] == 1))):
