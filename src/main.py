@@ -7,7 +7,8 @@ from states.solver import *
 
 events = {
     "START_GAME" : pygame.USEREVENT + 1,
-    "START_GAME_AI" : pygame.USEREVENT + 2
+    "START_GAME_AI" : pygame.USEREVENT + 2,
+    "RETURN_TO_MAIN_MENU" : pygame.USEREVENT + 3
 }
 
 colors = {
@@ -47,6 +48,8 @@ class App:
                 print(solution.print_parents())
             else:
                 print("No solution found")
+        elif event.type == events['RETURN_TO_MAIN_MENU']:
+            self._handler.state = 'menu'
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
             self._handler.runner.add_input("left")
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
@@ -66,6 +69,8 @@ class App:
                 self._handler.runner_loop()
             case 'running_ai':
                 pass
+            case 'ending_menu':
+                pass
 
     #prints out screen graphics
     def on_render(self):
@@ -76,6 +81,9 @@ class App:
                 self._handler.runner.display()
             case 'running_ai':
                 pass
+            case 'ending_menu':
+                self._handler.ending_menu.display()
+
         pygame.display.flip()
 
 

@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from states.menus.mainmenu import MainMenu
+from states.menus.endingmenu import EndingMenu
 from states.runner import *
 import json
 
@@ -10,8 +11,10 @@ class GameHandler:
         self.state = 'menu'
         self._init_config("config.json")
 
-        #Game states
+        #Game Menu's
         self.menu = MainMenu(display_surf, size)
+        self.ending_menu = EndingMenu(display_surf,size)
+        #Game states
         self.runner = Runner(display_surf,size,self._start,self._end,self._matrix_size)
         self.solver = Solver(self.runner.maze,self.runner.player,self._end)
 
@@ -28,7 +31,10 @@ class GameHandler:
         
     def runner_loop(self):
         self.runner.process_input()
-        self.runner.check_win(self._end)
+        if(self.runner.player._block_state.check_goal(self._end)):
+            self.state = 'ending_menu'
+            self.ending_menu._moves = self.runner.player._number_moves
+        
 
 
         
