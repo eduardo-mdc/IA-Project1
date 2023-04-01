@@ -8,7 +8,9 @@ from states.solver import *
 events = {
     "START_GAME" : pygame.USEREVENT + 1,
     "START_GAME_AI" : pygame.USEREVENT + 2,
-    "RETURN_TO_MAIN_MENU" : pygame.USEREVENT + 3
+    "RETURN_TO_MAIN_MENU" : pygame.USEREVENT + 3,
+    "CHANGE_TO_ENDING_MENU" : pygame.USEREVENT + 4,
+    "RESTART_GAME" : pygame.USEREVENT + 5
 }
 
 colors = {
@@ -38,8 +40,10 @@ class App:
         if event.type == pygame.QUIT:
             self._running = False
         elif event.type == events['START_GAME']:
+            self._handler.create_runner()
             self._handler.state = 'running'
         elif event.type == events['START_GAME_AI']:
+            self._handler.create_solver()
             self._handler.state = 'running_ai'
             #TEMPORARY
             solution = self._handler.solver.solve()
@@ -49,15 +53,28 @@ class App:
             else:
                 print("No solution found")
         elif event.type == events['RETURN_TO_MAIN_MENU']:
+            self._handler.create_menu()
             self._handler.state = 'menu'
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-            self._handler.runner.add_input("left")
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-            self._handler.runner.add_input("right")
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-            self._handler.runner.add_input("up")
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
-            self._handler.runner.add_input("down")
+        elif event.type == events['CHANGE_TO_ENDING_MENU']:
+            self._handler.create_ending_menu(self._handler.runner.player._number_moves)
+            self._handler.state = 'ending_menu'
+        elif event.type == events['RESTART_GAME']:
+            self._handler.create_runner()            
+            self._handler.state = 'running'
+        
+        #Parse User Input
+        if self._handler.state == 'running':
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                self._handler.runner.add_input("left")
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                self._handler.runner.add_input("right")
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+                self._handler.runner.add_input("up")
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+                self._handler.runner.add_input("down")
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_r:
+                pygame.event.post(pygame.event.Event(events['RESTART_GAME']))
+
 
 
     #compute changes in the game world
