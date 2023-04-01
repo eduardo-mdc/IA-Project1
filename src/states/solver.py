@@ -8,14 +8,30 @@ from collections import deque
 from treenode import *
 
 class Solver:
-    def __init__(self,maze,player,goal):
+    def __init__(self,maze,player,goal,type):
         self._maze = maze
         self._player = player
         self._goal = goal
+        self._type = type
 
     def solve(self):
-        moves = self._player.getMoves()
-        self.solve_DFS()
+        event = 'ENDING_AI_MENU_FAILURE'
+        #moves = self._player.getMoves()
+        match type:
+            case "BFS":
+                solution = self.solve_BFS()
+            case "DFS":
+                solution = self.solve_DFS()
+        if(solution):
+            print("Solution :")
+            print(solution.print_parents())
+            event = 'ENDING_AI_MENU_SUCCESS'
+        else:
+            print("No solution found")
+            
+        #Change to ending menu
+        pygame.event.post(pygame.event.Event(events[event]))
+
 
     def solve_BFS(self):
         print("Solving with BFS")
