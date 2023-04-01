@@ -1,8 +1,13 @@
 {
     "game" : {
-        "matrix_size" : 10
-    },
-    "visual" : {
-        "block_margin" : 1
+        "matrix_size" : 25,
+        "start" : {
+            "x" : 0,
+            "y" : 0
+        },
+        "end" : {
+            "x" : 24,
+            "y" : 24
+        }
     }
 } 

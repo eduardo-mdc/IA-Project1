@@ -7,44 +7,34 @@ import random
 
 
 class Runner(GameState):
-    def __init__(self,display_surf,size,config):
+    def __init__(self,display_surf,size,start,end,matrix_size):
         super().__init__(display_surf,size)
-        self._config = config
+        self._size = size
+        self._init_visual(matrix_size)
+
+        dead_end_prob = 0.2
+
+        self.maze = generate_matrix(matrix_size, start, end, dead_end_prob)
+        print_matrix(self.maze,matrix_size)
+        self.player = Player(self.maze,start,self._display_surf)
+        self.inputs = []
+       
+         
+    def _init_visual(self,matrix_size):
+        self._width = self._size[0]
+        self._height = self._size[1]
+        self._rows = matrix_size
+        self._cols = matrix_size
+        self._square_width = self._width / self._cols
+        self._square_height = self._height / self._rows
+
+
         self.tile_image = pygame.image.load('src/artset/grass_tile.png')
         self.void_image = pygame.image.load('src/artset/water_tile.png')
         self.end_image = pygame.image.load('src/artset/end_tile.png')
 
         self.player_h = pygame.image.load('src/artset/player_horizontal.png')
         self.player_v = pygame.image.load('src/artset/player_vertical.png')
-
-        self._finishX = 0
-        self._finishY = 0
-        self._initialX = 0
-        self._initialY = 0
-        self._create_visual_matrix()
-
-        size = self._config['game']['matrix_size']
-        start = (0, 0)
-        end = (size-1, size-1)
-        dead_end_prob = 0.2
-
-        self.maze = generate_matrix(size, start, end, dead_end_prob)
-        print_matrix(self.maze,size)
-        self.block_position = [self._initialX, self._initialY] # The position of the block in the maze
-        self.player = Player(self.maze,self.block_position)
-        self.inputs = []
-       
-    def _display_player():
-        pass
-    
-         
-    def _create_visual_matrix(self):
-        self._width = self._size[0]
-        self._height = self._size[1]
-        self._rows = self._config['game']['matrix_size']
-        self._cols = self._config['game']['matrix_size']
-        self._square_width = self._width / self._cols
-        self._square_height = self._height / self._rows
         
     def display(self):
         self._display_surf.fill((colors['BLACK']))
@@ -53,30 +43,19 @@ class Runner(GameState):
         for row in range(self._rows):
             for col in range(self._cols):
                 # Calculate the position of the square
-                x = col * self._square_width + self._config['visual']['block_margin']
-                y = row * self._square_height + self._config['visual']['block_margin']
+                x = col * self._square_width
+                y = row * self._square_height
                 
                # Get the color of the square
                 if self.maze[row][col] == 0:
-                    self._display_surf.blit(self.void_image, (x, y))
-                    # Draw the PNG tile
-                    pass
-                else:
-                    self._display_surf.blit(self.tile_image, (x, y))
-            
-                    
-                # Draw the square
-                #  pygame.draw.rect(self._display_surf, color, (x, y, self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
-
-                # Draw the block
-                if [row, col] == self.block_position:
-                    pygame.draw.rect(self._display_surf, colors['RED'], (x, y, self._square_width-self._config['visual']['block_margin']*2, self._square_height-self._config['visual']['block_margin']*2))
-
-                # Draw the start cell as X and finish cell as O
-                if (row, col) == (0, 0):
-                    self._display_surf.blit(self.player_v, (x, y))
+                    scaled_image = pygame.transform.scale(self.void_image, (self._square_width, self._square_height))
                 elif (row, col) == (self._rows-1, self._cols-1):
-                    self._display_surf.blit(self.end_image, (x, y))
+                    scaled_image = pygame.transform.scale(self.end_image, (self._square_width, self._square_height))
+                else:
+                    scaled_image = pygame.transform.scale(self.tile_image, (self._square_width, self._square_height))
+                self._display_surf.blit(scaled_image, (x, y))
+
+        self.player.display(self._square_width,self._square_height)
         
     def add_input(self, input):
         self.inputs.append(input)
@@ -89,6 +68,7 @@ class Runner(GameState):
                 self.player.process_move(move[0], arrow)
             self.player._printCurrentPosition()
             self.player._printChildStates()
+
 
 
 def generate_matrix(size, start, end, dead_end_prob=0.7):
@@ -134,6 +114,12 @@ def generate_matrix(size, start, end, dead_end_prob=0.7):
         else:
             i, j = path[-1]
             path.pop()
+    
+    i, j = start
+    matrix[i][j] = 1
+    i, j = end
+    matrix[i][j] = 1
+
 
     return matrix
 
