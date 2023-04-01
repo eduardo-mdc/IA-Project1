@@ -14,7 +14,7 @@ class Solver:
 
     def solve(self):
         moves = self._player.getMoves()
-        self.solve_BFS()
+        self.solve_DFS()
 
     def solve_BFS(self):
         print("Solving with BFS")
@@ -31,7 +31,7 @@ class Solver:
                 return node
             
             if node not in visited:
-                #add node to visited
+                # add node to visited
                 visited.append(node)
                 for state in node.state.child_block_states(self._maze):   # go through next states
                     # create tree node with the new state
@@ -44,3 +44,30 @@ class Solver:
                     queue.append(leaf)
         return None
     
+    def solve_DFS(self):
+        print("Solving with DFS")
+        root = TreeNode(self._player._block_state)   # create the root node in the search tree
+        stack = [root]   # initialize the stack to store the nodes
+        visited = []
+
+        while stack:
+            node = stack.pop()   # get last inserted element in the stack
+            node.check_depth()
+            print("Current Position")
+            print(node.state)
+            if node.state.check_goal(self._maze):   # check goal state
+                return node
+            
+            if node not in visited:
+                # add node to visited
+                visited.append(node)
+                for state in node.state.child_block_states(self._maze):   # go through next states
+                    # create tree node with the new state
+                    leaf = TreeNode(state[1])
+                    
+                    # link child node to its parent in the tree
+                    node.add_child(leaf)
+                    
+                    # enqueue the child node
+                    stack.append(leaf)
+        return None
