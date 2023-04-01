@@ -13,12 +13,14 @@ class Player():
         self._display_surf = display_surf
         self._vertical_tile = pygame.image.load('src/artset/player_vertical.png')
         self._fallen_tile = pygame.image.load('src/artset/player_horizontal.png')
+        self._number_moves = 0
 
     
     def getMoves(self):
         return self._block_state.child_block_states(self._maze)
 
     def process_move(self, move, arrow):
+        prev_block_state = self._block_state
         if arrow == "left":
             match move:
                 case "fall_l":
@@ -54,6 +56,9 @@ class Player():
                     self._block_state = self._block_state.get_up_u(self._maze)
                 case "roll_u":
                     self._block_state = self._block_state.roll_u(self._maze)
+        
+        if self._block_state != prev_block_state:
+            self._number_moves += 1
 
     def display(self, tile_width, tile_height):
         if self._block_state.fallen:
