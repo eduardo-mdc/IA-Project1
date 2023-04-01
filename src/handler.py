@@ -28,7 +28,7 @@ class GameHandler:
     def runner_loop(self):
         self.runner.process_input()
         if(self.runner.player._block_state.check_goal(self._end)):
-            pygame.event.post(pygame.event.Event(events['RETURN_TO_MAIN_MENU']))
+            pygame.event.post(pygame.event.Event(events['CHANGE_TO_ENDING_MENU']))
 
     def create_runner(self):
         self.runner = Runner(self._display_surf,self.size,self._start,self._end,self._matrix_size)

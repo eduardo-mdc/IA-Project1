@@ -13,7 +13,7 @@ class EndingMenu(Menu):
     def _init_menu(self):
         self._menu = pygame_menu.Menu('Victory Menu', self._size[0], self._size[1],theme=pygame_menu.themes.THEME_ORANGE)
         self._menu.add.label('Victory!', "victory_label")
-        self._menu.add.label('Number of Moves :' + str(self._moves), "moves_label")
+        self._menu.add.label('Number of Moves : ' + str(self._moves), "moves_label")
 
         self._menu.add.button('Return to Main Menu', self.return_to_main_menu)
     
