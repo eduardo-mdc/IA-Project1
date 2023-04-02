@@ -7,6 +7,7 @@ from copy import deepcopy
 from collections import deque
 from treenode import *
 from generator import *
+import heapq
 
 class Solver:
     def __init__(self,display_surf,matrix_size,start,goal,type):
@@ -26,6 +27,8 @@ class Solver:
                 solution = self.solve_BFS()
             case "DFS":
                 solution = self.solve_DFS()
+            case "Greedy":
+                solution = self.solve_greedy()
         if(solution):
             print("\n\n\n --- Solution : --- \n\n\n")
             print(solution.print_parents())
@@ -90,4 +93,27 @@ class Solver:
                     
                     # enqueue the child node
                     stack.append(leaf)
+        return None
+    
+    def solve_greedy(self):
+        print("Solving with Greedy")
+        root = TreeNode(self._player._block_state)   # create the root node in the search tree
+        heap = [(root.heuristic(self._goal, self._maze), root)] # priority queue where the heuristic is the priority
+
+        while heap:
+            _, node = heapq.heappop(heap) # get node with lowest heuristic
+
+            if node.state.check_goal(self._maze):
+                return node
+            
+            for state in node.state.child_block_states(self._maze):
+                # create tree node with the new state
+                leaf = TreeNode(state[1])
+
+                # link child node to its parent in the tree
+                node.add_child(leaf)
+
+                # push the child node to the heap
+                heapq.heappush(heap, (leaf.heuristic(self._maze), leaf))
+
         return None

@@ -23,6 +23,10 @@ class TreeNode:
         else:
             self.depth = self.parent.depth + 1
 
+    def heuristic(self, maze):
+        
+        return distance
+
     def __str__(self):
         return str(self.state)
     
