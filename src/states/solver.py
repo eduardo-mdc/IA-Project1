@@ -29,6 +29,8 @@ class Solver:
                 solution = self.solve_DFS()
             case "Greedy":
                 solution = self.solve_greedy()
+            case "A*":
+                solution = self.solve_a_star()
         if(solution):
             print("\n\n\n --- Solution : --- \n\n\n")
             print(solution.print_parents())
@@ -98,7 +100,7 @@ class Solver:
     def solve_greedy(self):
         print("Solving with Greedy")
         root = TreeNode(self._player._block_state)   # create the root node in the search tree
-        heap = [(root.heuristic(self._goal, self._maze), root)] # priority queue where the heuristic is the priority
+        heap = [(root.heuristic(self._goal), root)] # priority queue where the heuristic is the priority
 
         while heap:
             _, node = heapq.heappop(heap) # get node with lowest heuristic
@@ -114,14 +116,15 @@ class Solver:
                 node.add_child(leaf)
 
                 # push the child node to the heap
-                heapq.heappush(heap, (leaf.heuristic(self._maze), leaf))
+                heapq.heappush(heap, (leaf.heuristic(self._goal), leaf))
 
         return None
     
     def solve_a_star(self):
         print("Solving with A*")
         root = TreeNode(self._player._block_state)   # create the root node in the search tree
-        heap = [(root.heuristic(self._goal, self._maze), root)] # priority queue where the heuristic is the priority
+        heap = [(root.heuristic(self._goal), root)] # priority queue where the heuristic is the priority
+        visited = []
 
         while heap:
             _, node = heapq.heappop(heap) # get node with lowest heuristic
@@ -129,14 +132,24 @@ class Solver:
             if node.state.check_goal(self._maze):
                 return node
             
+            visited.append(node)
+            
             for state in node.state.child_block_states(self._maze):
                 # create tree node with the new state
                 leaf = TreeNode(state[1])
+                
+                if leaf not in visited:
+                    
+                    # calculate heuristic for the child node
+                    h = leaf.heuristic(self._goal)
 
-                # link child node to its parent in the tree
-                node.add_child(leaf)
+                    # calculate estimated total cost to reach goal through current child node
+                    f = leaf.depth + h
 
-                # push the child node to the heap
-                heapq.heappush(heap, (leaf.heuristic(self._maze), leaf))
+                    # link child node to its parent in the tree
+                    node.add_child(leaf)
+
+                    # Apush child node with its estimated total cost
+                    heapq.heappush(heap, (f, leaf))
 
         return None
