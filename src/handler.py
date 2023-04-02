@@ -2,6 +2,10 @@ import pygame
 from pygame.locals import *
 from states.menus.mainmenu import MainMenu
 from states.menus.endingmenu import EndingMenu
+from states.menus.solvermenu import SolverMenu
+from states.menus.running_algorithm_menu import RunningAlgorithmMenu
+from states.menus.ending_algorithm_menu import EndingAlgorithmMenu
+
 from states.runner import *
 import json
 
@@ -33,11 +37,21 @@ class GameHandler:
     def create_runner(self):
         self.runner = Runner(self._display_surf,self.size,self._start,self._end,self._matrix_size)
 
-    def create_solver(self):
-        self.solver = Solver(self.runner.maze,self.runner.player,self._end)
-    
+    def create_solver(self,type):
+        self.solver = Solver(self._display_surf,self._matrix_size,self._start,self._end,type)
+
     def create_ending_menu(self,moves):
         self.ending_menu = EndingMenu(self._display_surf,self.size,moves)
+
+    def create_solver_menu(self):
+        self.solver_menu = SolverMenu(self._display_surf,self.size)
+
+    def create_running_algorithm_menu(self):
+        self.running_algorithm_menu = RunningAlgorithmMenu(self._display_surf,self.size)
+
+    def create_ending_algorithm_menu(self,ending_type):
+        self.ending_algorithm_menu = EndingAlgorithmMenu(self._display_surf,self.size,ending_type)
+
     
     def create_menu(self):
         self.menu = MainMenu(self._display_surf,self.size)

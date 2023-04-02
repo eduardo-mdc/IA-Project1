@@ -12,7 +12,7 @@ class MainMenu(Menu):
     def _init_menu(self):
         self._menu = pygame_menu.Menu('Main Menu', self._size[0], self._size[1],theme=pygame_menu.themes.THEME_ORANGE)
         self._menu.add.button('Play', self._start_game)
-        self._menu.add.button('Play with AI', self._start_game_ai)
+        self._menu.add.button('Solver', self._start_game_ai)
         self._menu.add.button('Quit', pygame_menu.events.EXIT)
 
 
@@ -21,7 +21,7 @@ class MainMenu(Menu):
         self._menu.disable()
 
     def _start_game_ai(self):
-        pygame.event.post(pygame.event.Event(events['START_GAME_AI']))
+        pygame.event.post(pygame.event.Event(events['CHANGE_TO_SOLVER_MENU']))
         self._menu.disable()
 
     def display(self):
