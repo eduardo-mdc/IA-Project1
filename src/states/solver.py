@@ -117,3 +117,26 @@ class Solver:
                 heapq.heappush(heap, (leaf.heuristic(self._maze), leaf))
 
         return None
+    
+    def solve_a_star(self):
+        print("Solving with A*")
+        root = TreeNode(self._player._block_state)   # create the root node in the search tree
+        heap = [(root.heuristic(self._goal, self._maze), root)] # priority queue where the heuristic is the priority
+
+        while heap:
+            _, node = heapq.heappop(heap) # get node with lowest heuristic
+
+            if node.state.check_goal(self._maze):
+                return node
+            
+            for state in node.state.child_block_states(self._maze):
+                # create tree node with the new state
+                leaf = TreeNode(state[1])
+
+                # link child node to its parent in the tree
+                node.add_child(leaf)
+
+                # push the child node to the heap
+                heapq.heappush(heap, (leaf.heuristic(self._maze), leaf))
+
+        return None

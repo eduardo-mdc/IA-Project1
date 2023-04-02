@@ -1,3 +1,5 @@
+import math
+
 # A generic definition of a tree node holding a state of the problem
 class TreeNode:
     def __init__(self, state, parent=None):
@@ -23,9 +25,8 @@ class TreeNode:
         else:
             self.depth = self.parent.depth + 1
 
-    def heuristic(self, maze):
-        
-        return distance
+    def heuristic(self, goal, maze):
+        return math.sqrt((goal[0] - self.state.x)**2 + (goal[1] - self.state.y)**2)
 
     def __str__(self):
         return str(self.state)
