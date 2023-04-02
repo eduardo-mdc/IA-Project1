@@ -6,16 +6,20 @@ from main import *
 from copy import deepcopy
 from collections import deque
 from treenode import *
+from generator import *
 
 class Solver:
-    def __init__(self,maze,player,goal,type):
-        self._maze = maze
-        self._player = player
+    def __init__(self,display_surf,matrix_size,start,goal,type):
+        self._display_surf = display_surf
         self._goal = goal
         self._type = type
+        dead_end_prob = 0.2
+        self._maze = generate_matrix(matrix_size, start, goal, dead_end_prob)
+        self._player = Player(self._maze,start,self._display_surf)
+        print_matrix(self._maze,matrix_size)
 
     def solve(self):
-        event = 'ENDING_AI_MENU_FAILURE'
+        solution = None
         #moves = self._player.getMoves()
         match type:
             case "BFS":
@@ -25,12 +29,11 @@ class Solver:
         if(solution):
             print("Solution :")
             print(solution.print_parents())
-            event = 'ENDING_AI_MENU_SUCCESS'
-        else:
-            print("No solution found")
-            
-        #Change to ending menu
-        pygame.event.post(pygame.event.Event(events[event]))
+            return True
+ 
+        print("No solution found")
+        return False
+
 
 
     def solve_BFS(self):

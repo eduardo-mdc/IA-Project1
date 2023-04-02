@@ -23,7 +23,7 @@ colors = {
     'RED': (255, 0, 0),
     'GREEN': (0, 255, 0),
     'BLUE': (0, 0, 255),
-    'WHITE': (255, 255, 255)  # Add this line
+    'WHITE': (255, 255, 255) 
 }
 
 class App:
@@ -43,7 +43,10 @@ class App:
         self._handler.create_running_algorithm_menu()
         self._handler.running_algorithm_menu.display()
         self._handler.create_solver(type)
-        self._handler.solver.solve()
+        self._handler.state = 'ending_solver_menu'
+        self._handler.create_ending_algorithm_menu(self._handler.solver.solve())
+
+
 
     #proceeds events like pressed keys, mouse motion etc
     def on_event(self, event):
@@ -69,9 +72,14 @@ class App:
         elif event.type == events['START_GAME_DFS']:
             self.algorithm_event("DFS")
         elif event.type == events['ENDING_AI_MENU_FAILURE']:
-            self.algorithm_event("DFS")
+            self._handler.create_ending_algorithm_menu("success")
+            self._handler.state = 'ending_solver_menu'
+            print ("failure")
         elif event.type == events['ENDING_AI_MENU_SUCCESS']:
-            self.algorithm_event("DFS")
+            self._handler.create_ending_algorithm_menu("failure")
+            self._handler.state = 'ending_solver_menu'
+            print ("success")
+
 
         
         #Parse User Input
@@ -92,16 +100,8 @@ class App:
     #compute changes in the game world
     def on_loop(self):
         match self._handler.state:
-            case 'menu':
-                pass
             case 'running':
                 self._handler.runner_loop()
-            case 'running_ai':
-                pass
-            case 'ending_menu':
-                pass
-            case 'solver_menu':
-                pass
 
     #prints out screen graphics
     def on_render(self):
@@ -110,12 +110,13 @@ class App:
                 self._handler.menu.display()
             case 'running':
                 self._handler.runner.display()
-            case 'running_ai':
-                pass
             case 'ending_menu':
                 self._handler.ending_menu.display()
             case 'solver_menu':
                 self._handler.solver_menu.display()
+            case 'ending_solver_menu':
+                self._handler.ending_algorithm_menu.display()
+
         pygame.display.flip()
 
 
