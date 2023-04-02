@@ -21,7 +21,7 @@ class Solver:
     def solve(self):
         solution = None
         #moves = self._player.getMoves()
-        match type:
+        match self._type:
             case "BFS":
                 solution = self.solve_BFS()
             case "DFS":
