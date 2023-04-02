@@ -28,8 +28,8 @@ class TreeNode:
     
     def print_parents(self):
         if self.parent is None:
-            print(self)
+            print(self.state)
         else:
             self.parent.print_parents()
-            print(self)
+            print(self.state)
     

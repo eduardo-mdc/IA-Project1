@@ -27,7 +27,7 @@ class Solver:
             case "DFS":
                 solution = self.solve_DFS()
         if(solution):
-            print("Solution :")
+            print("\n\n\n --- Solution : --- \n\n\n")
             print(solution.print_parents())
             return True
  
@@ -56,7 +56,7 @@ class Solver:
                 for state in node.state.child_block_states(self._maze):   # go through next states
                     # create tree node with the new state
                     leaf = TreeNode(state[1])
-                    
+            
                     # link child node to its parent in the tree
                     node.add_child(leaf)
                     
@@ -73,8 +73,8 @@ class Solver:
         while stack:
             node = stack.pop()   # get last inserted element in the stack
             node.check_depth()
-            print("Current Position")
-            print(node.state)
+            #print("Current Position")
+            #print(node.state)
             if node.state.check_goal(self._maze):   # check goal state
                 return node
             
