@@ -134,33 +134,37 @@ class Solver:
     def solve_a_star(self):
         print("Solving with A*")
         root = TreeNode(self._player._block_state)   # create the root node in the search tree
-        heap = [(root.heuristic(self._goal), root)] # priority queue where the heuristic is the priority
+        heap = [] # priority queue where the heuristic is the priority
+        heapq.heappush(heap, (root.heuristic(self._goal), root))
         visited = []
 
         while heap:
-            _, node = heapq.heappop(heap) # get node with lowest heuristic
-
+            node = heapq.heappop(heap)[1] # get node with lowest heuristic
+            #print("Current Position")
+            #print(node.state)
+            node.check_depth()
             if node.state.check_goal(self._goal):
                 return node
             
-            visited.append(node)
-            
-            for state in node.state.child_block_states(self._maze):
-                # create tree node with the new state
-                leaf = TreeNode(state[1])
-                
-                if leaf not in visited:
+            if node not in visited:
+                # add node to visited
+                visited.append(node)
+                for state in node.state.child_block_states(self._maze):
+                    # create tree node with the new state
+                    leaf = TreeNode(state[1])
                     
-                    # calculate heuristic for the child node
-                    h = leaf.heuristic(self._goal)
+                    if leaf not in visited:
+                        
+                        # calculate heuristic for the child node
+                        h = leaf.heuristic(self._goal)
 
-                    # calculate estimated total cost to reach goal through current child node
-                    f = leaf.depth + h
+                        # calculate estimated total cost to reach goal through current child node
+                        f = leaf.depth + h
 
-                    # link child node to its parent in the tree
-                    node.add_child(leaf)
+                        # link child node to its parent in the tree
+                        node.add_child(leaf)
 
-                    # Apush child node with its estimated total cost
-                    heapq.heappush(heap, (f, leaf))
+                        # Apush child node with its estimated total cost
+                        heapq.heappush(heap, (f, leaf))
 
         return None
