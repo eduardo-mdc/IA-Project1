@@ -16,6 +16,7 @@ class SolverMenu(Menu):
         self._menu.add.button('DFS', self._start_game_dfs)
         self._menu.add.button('Greedy', self._start_game_greedy)
         self._menu.add.button('A*', self._start_game_a_star)
+        self._menu.add.button('Compare Algorithms', self._start_compare_algorithms)
         self._menu.add.button('Return to Main Menu', self.return_to_main_menu)
 
     def return_to_main_menu(self):
@@ -36,6 +37,10 @@ class SolverMenu(Menu):
 
     def _start_game_a_star(self):
         pygame.event.post(pygame.event.Event(events['START_GAME_A_STAR']))
+        self._menu.disable()
+    
+    def _start_compare_algorithms(self):
+        pygame.event.post(pygame.event.Event(events['START_COMPARE_ALGORITHMS']))
         self._menu.disable()
 
     def display(self):

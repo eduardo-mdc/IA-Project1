@@ -12,9 +12,7 @@ class Runner(GameState):
         self._size = size
         self._init_visual(matrix_size)
 
-        dead_end_prob = 0.2
-
-        self.maze = generate_matrix(matrix_size, start, end, dead_end_prob)
+        self.maze = generate_matrix(matrix_size, start, end)
         print_matrix(self.maze,matrix_size)
         self.player = Player(self.maze,start,self._display_surf)
         self.inputs = []

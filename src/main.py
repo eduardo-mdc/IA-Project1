@@ -16,7 +16,8 @@ events = {
     "START_GAME_GREEDY" : pygame.USEREVENT + 8,
     "START_GAME_A_STAR" : pygame.USEREVENT + 9,
     "ENDING_AI_MENU_FAILURE" : pygame.USEREVENT + 10,
-    "ENDING_AI_MENU_SUCCESS" : pygame.USEREVENT + 11
+    "ENDING_AI_MENU_SUCCESS" : pygame.USEREVENT + 11,
+    "START_COMPARE_ALGORITHMS" : pygame.USEREVENT + 12
 }
 
 colors = {
@@ -45,9 +46,12 @@ class App:
         self._handler.create_running_algorithm_menu()
         self._handler.running_algorithm_menu.display()
         self._handler.create_solver(type)
-        self._handler.state = 'ending_solver_menu'
-        self._handler.create_ending_algorithm_menu(self._handler.solver.solve())
-
+        if type != "COMPARE":
+            self._handler.state = 'ending_solver_menu'
+            self._handler.create_ending_algorithm_menu(self._handler.solver.solve())
+        else:
+            self._handler.state = 'compare_algorithms'
+            self._handler.create_compare_algorithms_menu(self._handler.solver.solve())
 
 
     #proceeds events like pressed keys, mouse motion etc
@@ -77,15 +81,8 @@ class App:
             self.algorithm_event("GREEDY")
         elif event.type == events['START_GAME_A_STAR']:
             self.algorithm_event("A*")
-        elif event.type == events['ENDING_AI_MENU_FAILURE']:
-            self._handler.create_ending_algorithm_menu("success")
-            self._handler.state = 'ending_solver_menu'
-            print ("failure")
-        elif event.type == events['ENDING_AI_MENU_SUCCESS']:
-            self._handler.create_ending_algorithm_menu("failure")
-            self._handler.state = 'ending_solver_menu'
-            print ("success")
-
+        elif event.type == events['START_COMPARE_ALGORITHMS']:
+            self.algorithm_event("COMPARE")
 
         
         #Parse User Input
@@ -122,6 +119,8 @@ class App:
                 self._handler.solver_menu.display()
             case 'ending_solver_menu':
                 self._handler.ending_algorithm_menu.display()
+            case 'compare_algorithms':
+                self._handler.ending_compare_menu.display()
 
         pygame.display.flip()
 

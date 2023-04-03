@@ -1,6 +1,6 @@
 import random
 
-def generate_matrix(size, start, end, dead_end_prob=0.7):
+def generate_matrix(size, start, end):
     # Initialize the matrix with zeros
     matrix = [[0 for _ in range(size)] for _ in range(size)]
 

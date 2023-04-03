@@ -9,14 +9,17 @@ from treenode import *
 from generator import *
 import heapq
 import time
+from writer import *
 
 class Solver:
-    def __init__(self,display_surf,matrix_size,start,goal,type):
+    def __init__(self,display_surf,matrix_size,start,goal,type,iterations):
         self._display_surf = display_surf
+        self._start = start
         self._goal = goal
         self._type = type
-        dead_end_prob = 0.2
-        self._maze = generate_matrix(matrix_size, start, goal, dead_end_prob)
+        self._iterations = int(iterations)
+        self._matrix_size = matrix_size
+        self._maze = generate_matrix(matrix_size, start, goal)
         self._player = Player(self._maze,start,self._display_surf)
         print_matrix(self._maze,matrix_size)
 
@@ -32,6 +35,12 @@ class Solver:
                 solution = self.solve_greedy()
             case "A*":
                 solution = self.solve_a_star()
+            case "COMPARE":
+                solution = self.solve_all()
+                if solution:
+                    end_time = time.time()
+                    self.execution_time = round(end_time - start_time,3)
+                    write_to_csv(solution,self._iterations,self._matrix_size)
         end_time = time.time()
         self.execution_time = round(end_time - start_time,3)
         print("Execution time:", self.execution_time, "seconds")
@@ -168,3 +177,43 @@ class Solver:
                         heapq.heappush(heap, (f, leaf))
 
         return None
+    
+    def _append_solution(self, type):
+        start_time = time.time()
+        solution = None
+        if type == "BFS":
+            solution = self.solve_BFS()
+        elif type == "DFS":
+            solution = self.solve_DFS()
+        elif type == "GREEDY":
+            solution = self.solve_greedy()
+        elif type == "A*":
+            solution = self.solve_a_star()
+        execution_time = round(time.time() - start_time,3)
+
+        if solution:
+            return (solution.depth, execution_time)
+    
+        return (None, execution_time)
+
+    def solve_all(self):
+        print("Solving with all algorithms")
+        bfs = ["bfs"]
+        dfs = ["dfs"]
+        greedy = ["greedy"]
+        a_star = ["a_star"]
+        for i in range(self._iterations):
+            self._regenerate_maze()
+            print ("-- Iteration", str(i+1), "of", str(self._iterations) + " -- ")
+            print_matrix(self._maze,self._matrix_size)
+            bfs.append(self._append_solution("BFS"))
+            dfs.append(self._append_solution("DFS"))
+            greedy.append(self._append_solution("GREEDY"))
+            a_star.append(self._append_solution("A*"))
+        return (bfs, dfs, greedy, a_star)
+    
+    def _regenerate_maze(self):
+        self._maze = generate_matrix(self._matrix_size, self._start, self._goal)
+        self._player = Player(self._maze,self._start,self._display_surf)
+
+    
