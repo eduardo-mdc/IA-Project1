@@ -15,9 +15,10 @@ events = {
     "START_GAME_DFS" : pygame.USEREVENT + 7,
     "START_GAME_GREEDY" : pygame.USEREVENT + 8,
     "START_GAME_A_STAR" : pygame.USEREVENT + 9,
-    "ENDING_AI_MENU_FAILURE" : pygame.USEREVENT + 10,
-    "ENDING_AI_MENU_SUCCESS" : pygame.USEREVENT + 11,
-    "START_COMPARE_ALGORITHMS" : pygame.USEREVENT + 12
+    "START_GAME_IDS" : pygame.USEREVENT + 10,
+    "ENDING_AI_MENU_FAILURE" : pygame.USEREVENT + 11,
+    "ENDING_AI_MENU_SUCCESS" : pygame.USEREVENT + 12,
+    "START_COMPARE_ALGORITHMS" : pygame.USEREVENT + 13
 }
 
 colors = {
@@ -81,6 +82,8 @@ class App:
             self.algorithm_event("GREEDY")
         elif event.type == events['START_GAME_A_STAR']:
             self.algorithm_event("A*")
+        elif event.type == events['START_GAME_IDS']:
+            self.algorithm_event("IDS")
         elif event.type == events['START_COMPARE_ALGORITHMS']:
             self.algorithm_event("COMPARE")
 

@@ -178,6 +178,44 @@ class Solver:
 
         return None
     
+    def depth_limited_search(self, depth_limit):
+        root = TreeNode(self._player._block_state)   # create the root node in the search tree
+        stack = [root]   # initialize the stack to store the nodes
+        visited = []
+
+
+        while stack:
+            node = stack.pop()   # get last inserted element in the queue
+            node.check_depth()
+            if node.state.check_goal(self._goal):
+                return node
+
+            if node not in visited and node.depth < depth_limit:
+                # add leaf to visited
+                visited.append(node)
+                for state in node.state.child_block_states(self._maze):   # go through next states
+                    # create tree node with the new state
+                    leaf = TreeNode(state)
+                    # link child node to its parent in the tree
+                    node.add_child(leaf)
+                    # enqueue the child node
+                    stack.append(leaf)
+
+        return None
+
+    def solve_iterative_deepening_search(self):
+        print("Solving with Iterative Deepening Search")
+        depth_limit = 0
+
+        while True:
+            goal = self.depth_limited_search(depth_limit)
+            if goal != None:
+                if goal.state.check_goal(self._goal):
+                    return goal
+            depth_limit += 1
+
+        return None
+    
     def _append_solution(self, type):
         start_time = time.time()
         solution = None
@@ -188,6 +226,8 @@ class Solver:
         elif type == "GREEDY":
             solution = self.solve_greedy()
         elif type == "A*":
+            solution = self.solve_a_star()
+        elif type == "IDS":
             solution = self.solve_a_star()
         execution_time = round(time.time() - start_time,3)
 
@@ -202,6 +242,7 @@ class Solver:
         dfs = ["dfs"]
         greedy = ["greedy"]
         a_star = ["a_star"]
+        ids = ["ids"]
         for i in range(self._iterations):
             self._regenerate_maze()
             print ("-- Iteration", str(i+1), "of", str(self._iterations) + " -- ")
@@ -210,7 +251,8 @@ class Solver:
             dfs.append(self._append_solution("DFS"))
             greedy.append(self._append_solution("GREEDY"))
             a_star.append(self._append_solution("A*"))
-        return (bfs, dfs, greedy, a_star)
+            ids.append(self._append_solution("IDS"))
+        return (bfs, dfs, greedy, a_star, ids)
     
     def _regenerate_maze(self):
         self._maze = generate_matrix(self._matrix_size, self._start, self._goal)
