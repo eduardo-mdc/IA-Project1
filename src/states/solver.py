@@ -28,7 +28,7 @@ class Solver:
                 solution = self.solve_BFS()
             case "DFS":
                 solution = self.solve_DFS()
-            case "Greedy":
+            case "GREEDY":
                 solution = self.solve_greedy()
             case "A*":
                 solution = self.solve_a_star()
@@ -103,23 +103,31 @@ class Solver:
     def solve_greedy(self):
         print("Solving with Greedy")
         root = TreeNode(self._player._block_state)   # create the root node in the search tree
-        heap = [(root.heuristic(self._goal), root)] # priority queue where the heuristic is the priority
+        heap = [] # priority queue where the heuristic is the priority
+        heapq.heappush(heap, (root.heuristic(self._goal), root))
+        visited = []
+
 
         while heap:
-            _, node = heapq.heappop(heap) # get node with lowest heuristic
-
-            if node.state.check_goal(self._maze):
+            node = heapq.heappop(heap)[1] # get node with lowest heuristic
+            #print("Current Position")
+            #print(node.state)
+            node.check_depth()
+            if node.state.check_goal(self._goal):
                 return node
             
-            for state in node.state.child_block_states(self._maze):
-                # create tree node with the new state
-                leaf = TreeNode(state[1])
+            if node not in visited:
+                # add node to visited
+                visited.append(node)
+                for state in node.state.child_block_states(self._maze):
+                    # create tree node with the new state
+                    leaf = TreeNode(state[1])
 
-                # link child node to its parent in the tree
-                node.add_child(leaf)
+                    # link child node to its parent in the tree
+                    node.add_child(leaf)
 
-                # push the child node to the heap
-                heapq.heappush(heap, (leaf.heuristic(self._goal), leaf))
+                    # push the child node to the heap
+                    heapq.heappush(heap, (leaf.heuristic(self._goal), leaf))
 
         return None
     
@@ -132,7 +140,7 @@ class Solver:
         while heap:
             _, node = heapq.heappop(heap) # get node with lowest heuristic
 
-            if node.state.check_goal(self._maze):
+            if node.state.check_goal(self._goal):
                 return node
             
             visited.append(node)
