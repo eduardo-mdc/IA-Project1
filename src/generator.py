@@ -10,14 +10,6 @@ def generate_matrix(size, start, end, dead_end_prob=0.7):
     i, j = end
     matrix[i][j] = 9
 
-    # Generate random dead ends in the matrix
-    for i in range(size):
-        for j in range(size):
-            if matrix[i][j] != 0:
-                continue
-            if random.random() < dead_end_prob:
-                matrix[i][j] = 0
-
     # Generate a solution path from start to end
     path = [(start[0], start[1])]
     i, j = start
@@ -32,6 +24,7 @@ def generate_matrix(size, start, end, dead_end_prob=0.7):
             neighbors.append((i+1, j))
         if j < size-1 and matrix[i][j+1] not in (1, 2):
             neighbors.append((i, j+1))
+
         # Choose a random neighbor and mark it as part of the path
         if neighbors:
             i, j = random.choice(neighbors)
@@ -44,12 +37,29 @@ def generate_matrix(size, start, end, dead_end_prob=0.7):
             i, j = path[-1]
             path.pop()
     
-    i, j = start
-    matrix[i][j] = 1
-    i, j = end
-    matrix[i][j] = 1
-
-
+    # Mark the cells adjacent to the path as part of the path
+    for i, j in path:
+        if j > 0 and matrix[i][j-1] not in (1, 2):
+            matrix[i][j-1] = 1
+        if j < size-1 and matrix[i][j+1] not in (1, 2):
+            matrix[i][j+1] = 1
+        if i > 0 and matrix[i-1][j] not in (1, 2):
+            matrix[i-1][j] = 1
+        if i < size-1 and matrix[i+1][j] not in (1, 2):
+            matrix[i+1][j] = 1
+            
+    # Mark the cells in the block's path as part of the path
+    for i, j in path:
+        if matrix[i][j] == 1:
+            if i > 0 and matrix[i-1][j] == 0:
+                matrix[i-1][j] = 1
+            if i < size-1 and matrix[i+1][j] == 0:
+                matrix[i+1][j] = 1
+            if j > 0 and matrix[i][j-1] == 0:
+                matrix[i][j-1] = 1
+            if j < size-1 and matrix[i][j+1] == 0:
+                matrix[i][j+1] = 1
+            
     return matrix
 
 
