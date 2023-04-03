@@ -59,6 +59,11 @@ def generate_matrix(size, start, end, dead_end_prob=0.7):
                 matrix[i][j-1] = 1
             if j < size-1 and matrix[i][j+1] == 0:
                 matrix[i][j+1] = 1
+
+    i, j = start
+    matrix[i][j] = 1
+    i, j = end
+    matrix[i][j] = 1
             
     return matrix
 

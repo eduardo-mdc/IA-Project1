@@ -144,6 +144,6 @@ class BlockState:
     '''needed for the visited list'''
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            return self.__dict__ == other.__dict__
+            return (self.x == other.x and self.y == other.y and self.fallen == other.fallen and self.orientation == other.orientation)
         else:
             return False

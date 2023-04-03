@@ -54,8 +54,8 @@ class Solver:
         while queue:
             node = queue.popleft()   # get first element in the queue
             node.check_depth()
-            print("Current Position")
-            print(node.state)
+            #print("Current Position")
+            #print(node.state)
             if node.state.check_goal(self._goal):   # check goal state
                 return node
             
@@ -81,10 +81,10 @@ class Solver:
 
         while stack:
             node = stack.pop()   # get last inserted element in the stack
-            node.check_depth()
             #print("Current Position")
             #print(node.state)
-            if node.state.check_goal(self._maze):   # check goal state
+            node.check_depth()
+            if node.state.check_goal(self._goal):   # check goal state
                 return node
             
             if node not in visited:
@@ -93,7 +93,6 @@ class Solver:
                 for state in node.state.child_block_states(self._maze):   # go through next states
                     # create tree node with the new state
                     leaf = TreeNode(state[1])
-                    
                     # link child node to its parent in the tree
                     node.add_child(leaf)
                     
