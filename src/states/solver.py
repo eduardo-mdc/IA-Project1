@@ -8,6 +8,7 @@ from collections import deque
 from treenode import *
 from generator import *
 import heapq
+import time
 
 class Solver:
     def __init__(self,display_surf,matrix_size,start,goal,type):
@@ -20,8 +21,8 @@ class Solver:
         print_matrix(self._maze,matrix_size)
 
     def solve(self):
+        start_time = time.time()
         solution = None
-        #moves = self._player.getMoves()
         match self._type:
             case "BFS":
                 solution = self.solve_BFS()
@@ -31,13 +32,16 @@ class Solver:
                 solution = self.solve_greedy()
             case "A*":
                 solution = self.solve_a_star()
+        end_time = time.time()
+        self.execution_time = round(end_time - start_time,3)
+        print("Execution time:", self.execution_time, "seconds")
         if(solution):
-            print("\n\n\n --- Solution : --- \n\n\n")
-            print(solution.print_parents())
-            return True
+            #print("\n\n\n --- Solution : --- \n\n\n")
+            #print(solution.print_parents())
+            return (solution, self.execution_time)
  
         print("No solution found")
-        return False
+        return (None, self.execution_time)
 
 
 
