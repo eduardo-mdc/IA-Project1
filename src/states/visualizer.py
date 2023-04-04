@@ -6,16 +6,22 @@ from main import *
 from generator import *
 
 
-class Runner(GameState):
-    def __init__(self,display_surf,size,start,end,matrix_size):
+class Visualizer(GameState):
+    def __init__(self,display_surf,size,start,end,matrix_size,matrix,moves):
         super().__init__(display_surf,size)
+
+
+        print("----------VISUALIZER----------------")
         self._size = size
         self._init_visual(matrix_size)
-
-        self.maze = generate_matrix(matrix_size, start, end)
+    
+        self.maze = matrix
         print_matrix(self.maze,matrix_size)
+
         self.player = Player(self.maze,start,self._display_surf)
-        self.inputs = []
+        self.inputs = moves.get_parents()
+        self.move_counter = 0
+
        
          
     def _init_visual(self,matrix_size):
@@ -26,7 +32,6 @@ class Runner(GameState):
         self._square_width = self._width / self._cols
         self._square_height = self._height / self._rows
 
-
         self.tile_image = pygame.image.load('src/artset/grass_tile.png')
         self.void_image = pygame.image.load('src/artset/water_tile.png')
         self.end_image = pygame.image.load('src/artset/end_tile.png')
@@ -35,7 +40,7 @@ class Runner(GameState):
         self.player_v = pygame.image.load('src/artset/player_vertical.png')
         
     def display(self):
-        self._display_surf.fill((colors['BLACK']))
+        self._display_surf.fill(((0,0,0)))
 
         # Create the matrix of squares
         for row in range(self._rows):
@@ -59,11 +64,6 @@ class Runner(GameState):
         self.inputs.append(input)
 
     def process_input(self):
-        moves = self.player.getMoves()
-        if len(self.inputs) != 0:
-            arrow = self.inputs.pop()
-            for move in moves:
-                self.player.process_move(move[0], arrow)
-            self.player._printCurrentPosition()
-            self.player._printChildStates()
-
+        self.player._block_state = self.inputs[self.move_counter]
+        self.move_counter += 1
+        

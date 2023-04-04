@@ -9,5 +9,10 @@
             "x" : 24,
             "y" : 24
         }
+    },
+    "solver" : {
+        "iterations" : "10",
+        "heuristic" : "Manhattan",
+        "wait_time" : 0.1
     }
 } 

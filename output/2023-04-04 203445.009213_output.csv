@@ -1,0 +1,57 @@
+Matrix Size = 25,Iterations = 10
+Algorithm,Number of Moves,Execution Time
+bfs,32,1.108
+bfs,32,0.408
+bfs,32,1.096
+bfs,32,0.228
+bfs,32,1.171
+bfs,32,1.099
+bfs,48,0.248
+bfs,32,0.691
+bfs,32,0.807
+bfs,32,1.386
+Average bfs,33.6,0.824
+dfs,1053,0.344
+dfs,567,0.222
+dfs,960,0.521
+dfs,495,0.114
+dfs,970,0.358
+dfs,1034,0.377
+dfs,486,0.111
+dfs,861,0.21
+dfs,918,0.313
+dfs,1004,0.273
+Average dfs,834.8,0.284
+greedy,34,0.001
+greedy,34,0.001
+greedy,34,0.001
+greedy,43,0.001
+greedy,45,0.002
+greedy,32,0.001
+greedy,68,0.021
+greedy,33,0.001
+greedy,33,0.001
+greedy,33,0.001
+Average greedy,38.9,0.003
+a_star,34,0.002
+a_star,34,0.001
+a_star,34,0.002
+a_star,43,0.002
+a_star,45,0.003
+a_star,32,0.001
+a_star,68,0.033
+a_star,33,0.001
+a_star,33,0.001
+a_star,33,0.001
+Average a_star,38.9,0.005
+ids,34,0.002
+ids,34,0.001
+ids,34,0.001
+ids,43,0.002
+ids,45,0.003
+ids,32,0.001
+ids,68,0.033
+ids,33,0.001
+ids,33,0.001
+ids,33,0.001
+Average ids,38.9,0.005
