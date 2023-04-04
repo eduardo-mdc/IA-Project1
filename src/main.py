@@ -4,7 +4,6 @@ from handler import *
 from states import *
 from states.solver import *
 
-
 events = {
     "START_GAME" : pygame.USEREVENT + 1,
     "CHANGE_TO_SOLVER_MENU" : pygame.USEREVENT + 2,
@@ -111,6 +110,8 @@ class App:
         match self._handler.state:
             case 'running':
                 self._handler.runner_loop()
+            case 'visualizing':
+                self._handler.visualizer_loop()
 
     #prints out screen graphics
     def on_render(self):

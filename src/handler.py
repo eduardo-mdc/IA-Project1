@@ -6,7 +6,7 @@ from states.menus.solvermenu import SolverMenu
 from states.menus.running_algorithm_menu import RunningAlgorithmMenu
 from states.menus.ending_algorithm_menu import EndingAlgorithmMenu
 from states.menus.compare_algorithms_menu import EndingCompareMenu
-
+import time
 
 from states.runner import *
 
@@ -32,11 +32,20 @@ class GameHandler:
         self._end = (self._config['game']['end']['x'],self._config['game']['end']['y'])
         self._matrix_size = self._config['game']['matrix_size']
         self._iterations = self._config['solver']['iterations']
+        self._wait_time = self._config['solver']['wait_time']
+
         
     def runner_loop(self):
         self.runner.process_input()
         if(self.runner.player._block_state.check_goal(self._end)):
             pygame.event.post(pygame.event.Event(events['CHANGE_TO_ENDING_MENU']))
+    
+    def visualizer_loop(self):
+        self.visualizer.process_input()
+        if(self.visualizer.player._block_state.check_goal(self._end)):
+            pygame.event.post(pygame.event.Event(events['RETURN_TO_MAIN_MENU']))
+        time.sleep(self._wait_time)
+        
     
     def create_runner(self):
         self.runner = Runner(self._display_surf,self.size,self._start,self._end,self._matrix_size)

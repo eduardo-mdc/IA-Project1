@@ -11,7 +11,7 @@ class Visualizer(GameState):
         super().__init__(display_surf,size)
 
 
-        print("----------VISUALIZERRR----------------")
+        print("----------VISUALIZER----------------")
         self._size = size
         self._init_visual(matrix_size)
     
@@ -19,9 +19,9 @@ class Visualizer(GameState):
         print_matrix(self.maze,matrix_size)
 
         self.player = Player(self.maze,start,self._display_surf)
-        self.inputs = moves
+        self.inputs = moves.get_parents()
+        self.move_counter = 0
 
-        self.process_input()
        
          
     def _init_visual(self,matrix_size):
@@ -64,13 +64,6 @@ class Visualizer(GameState):
         self.inputs.append(input)
 
     def process_input(self):
-        start_x = 0
-        start_y = 0
-        print (self.inputs)
-
-        #iterar por cada elemento na solucao,
-        #com base na posicao anterior e na seguinte ver qual o tipo de arrow
-        #
-        #self.player.process_move(move[0], arrow)
-
+        self.player._block_state = self.inputs[self.move_counter]
+        self.move_counter += 1
         
