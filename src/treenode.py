@@ -43,6 +43,12 @@ class TreeNode:
             self.parent.print_parents()
             print(self.state)
     
+    def get_parents(self):
+        if self.parent is None:
+            return [self.state]
+        else:
+            return self.parent.get_parents() + [self.state]
+    
     @property
     def f(self):
         return self.depth + self.h

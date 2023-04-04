@@ -12,6 +12,7 @@
     },
     "solver" : {
         "iterations" : "10",
-        "heuristic" : "Manhattan"
+        "heuristic" : "Manhattan",
+        "wait_time" : 0.1
     }
 } 

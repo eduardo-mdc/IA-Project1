@@ -10,6 +10,7 @@ from generator import *
 import heapq
 import time
 from writer import *
+from states.visualizer import *
 
 class Solver:
     def __init__(self,display_surf,matrix_size,start,goal,type,iterations):
@@ -45,14 +46,14 @@ class Solver:
         self.execution_time = round(end_time - start_time,3)
         print("Execution time:", self.execution_time, "seconds")
         if(solution):
-            #print("\n\n\n --- Solution : --- \n\n\n")
-            #print(solution.print_parents())
+            print("\n\n\n --- Solution : --- \n\n\n")
+            print(solution.print_parents())
+            self._solution = solution
             return (solution, self.execution_time)
  
         print("No solution found")
+        self._solution = None
         return (None, self.execution_time)
-
-
 
     def solve_BFS(self):
         print("Solving with BFS")
