@@ -40,7 +40,7 @@ class SolverMenu(Menu):
         pygame.event.post(pygame.event.Event(events['START_GAME_A_STAR']))
         self._menu.disable()
     
-    def _start_game_a_star(self):
+    def _start_game_ids(self):
         pygame.event.post(pygame.event.Event(events['START_GAME_IDS']))
         self._menu.disable()
 

@@ -178,8 +178,7 @@ class Solver:
 
         return None
     
-    def depth_limited_search(self, depth_limit):
-        root = TreeNode(self._player._block_state)   # create the root node in the search tree
+    def depth_limited_search(self, root, depth_limit):
         stack = [root]   # initialize the stack to store the nodes
         visited = []
 
@@ -205,7 +204,18 @@ class Solver:
 
     def solve_iterative_deepening_search(self):
         print("Solving with Iterative Deepening Search")
-        depth_limit = 0
+        #depth_limit = 0
+        root = TreeNode(self._player._block_state)   # create the root node in the search tree
+        depth_limit = root.depth + 1
+        print("depth: ")
+        print(depth_limit)
+
+        for depth in range(depth_limit):
+            solution = self.depth_limited_search(root, depth)
+            if solution:
+                return solution
+
+        return None
 
         while True:
             goal = self.depth_limited_search(depth_limit)
