@@ -46,8 +46,8 @@ class Solver:
         self.execution_time = round(end_time - start_time,3)
         print("Execution time:", self.execution_time, "seconds")
         if(solution):
-            print("\n\n\n --- Solution : --- \n\n\n")
-            print(solution.print_parents())
+            #print("\n\n\n --- Solution : --- \n\n\n")
+            #print(solution.print_parents())
             self._solution = solution
             return (solution, self.execution_time)
  
