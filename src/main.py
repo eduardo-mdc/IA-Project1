@@ -18,7 +18,8 @@ events = {
     "START_GAME_IDS" : pygame.USEREVENT + 10,
     "ENDING_AI_MENU_FAILURE" : pygame.USEREVENT + 11,
     "ENDING_AI_MENU_SUCCESS" : pygame.USEREVENT + 12,
-    "START_COMPARE_ALGORITHMS" : pygame.USEREVENT + 13
+    "START_COMPARE_ALGORITHMS" : pygame.USEREVENT + 13,
+    "CHANGE_TO_VISUALIZE" : pygame.USEREVENT + 14
 }
 
 colors = {
@@ -86,7 +87,9 @@ class App:
             self.algorithm_event("IDS")
         elif event.type == events['START_COMPARE_ALGORITHMS']:
             self.algorithm_event("COMPARE")
-
+        elif event.type == events['CHANGE_TO_VISUALIZE']:
+            self._handler.create_visualizer(self._handler.solver._maze,self._handler.solver._solution)
+            self._handler.state = 'visualizing'
         
         #Parse User Input
         if self._handler.state == 'running':
@@ -124,6 +127,8 @@ class App:
                 self._handler.ending_algorithm_menu.display()
             case 'compare_algorithms':
                 self._handler.ending_compare_menu.display()
+            case 'visualizing':
+                self._handler.visualizer.display()
 
         pygame.display.flip()
 

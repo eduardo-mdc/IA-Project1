@@ -21,10 +21,17 @@ class EndingAlgorithmMenu(Menu):
         self._menu.add.label('Execution Time : ' + str(self._solution[1]) + " seconds", "time_label")
 
 
+        self._menu.add.button('Visualize', self.visualize)
         self._menu.add.button('Return to Main Menu', self.return_to_main_menu)
     
     def return_to_main_menu(self):
         pygame.event.post(pygame.event.Event(events['RETURN_TO_MAIN_MENU']))
+
+        self._menu.disable()
+
+    def visualize(self):
+        pygame.event.post(pygame.event.Event(events['CHANGE_TO_VISUALIZE']))
+
         self._menu.disable()
 
     def display(self):
