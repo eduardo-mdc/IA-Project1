@@ -1,17 +1,17 @@
 {
     "game" : {
-        "matrix_size" : 25,
+        "matrix_size" : 50,
         "start" : {
             "x" : 0,
             "y" : 0
         },
         "end" : {
-            "x" : 24,
-            "y" : 24
+            "x" : 49,
+            "y" : 49
         }
     },
     "solver" : {
-        "iterations" : "10",
+        "iterations" : "25",
         "heuristic" : "Manhattan",
         "wait_time" : 0.1
     }
